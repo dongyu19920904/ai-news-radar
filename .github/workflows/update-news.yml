@@ -2,6 +2,14 @@ name: Update AI News Snapshot
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/update-news.yml"
+      - "assets/**"
+      - "index.html"
+      - "tokens.css"
   schedule:
     - cron: "*/30 * * * *"
 
