@@ -6,11 +6,11 @@
 
 **Scout Skill helps you find the thoroughbreds among a pile of AI sources.**
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-green?style=flat-square)](https://learnprompt.github.io/ai-news-radar/)
-[![Actions](https://img.shields.io/github/actions/workflow/status/LearnPrompt/ai-news-radar/update-news.yml?branch=master&label=update&style=flat-square)](https://github.com/LearnPrompt/ai-news-radar/actions/workflows/update-news.yml)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-green?style=flat-square)](https://dongyu19920904.github.io/ai-news-radar/)
+[![Actions](https://img.shields.io/github/actions/workflow/status/dongyu19920904/ai-news-radar/update-news.yml?branch=master&label=update&style=flat-square)](https://github.com/dongyu19920904/ai-news-radar/actions/workflows/update-news.yml)
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](LICENSE)
 
-[Live site](https://learnprompt.github.io/ai-news-radar/) · [中文](README.md) · [Scout Skill](skills/ai-news-radar/README.md) · [Source strategy](docs/SOURCE_COVERAGE.md)
+[Live site](https://dongyu19920904.github.io/ai-news-radar/) · [中文](README.md) · [Scout Skill](skills/ai-news-radar/README.md) · [Source strategy](docs/SOURCE_COVERAGE.md)
 
 </div>
 
@@ -97,7 +97,7 @@ Readers do not need to install anything. Open the live site directly.
 To fork and customize your own version locally:
 
 ```bash
-git clone https://github.com/LearnPrompt/ai-news-radar.git
+git clone https://github.com/dongyu19920904/ai-news-radar.git
 cd ai-news-radar
 python3 -m venv .venv
 source .venv/bin/activate

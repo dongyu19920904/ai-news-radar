@@ -6,11 +6,11 @@
 
 **伯乐Skill（Scout Skill）帮你从一堆信源里选出千里马。**
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-green?style=flat-square)](https://learnprompt.github.io/ai-news-radar/)
-[![Actions](https://img.shields.io/github/actions/workflow/status/LearnPrompt/ai-news-radar/update-news.yml?branch=master&label=update&style=flat-square)](https://github.com/LearnPrompt/ai-news-radar/actions/workflows/update-news.yml)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-green?style=flat-square)](https://dongyu19920904.github.io/ai-news-radar/)
+[![Actions](https://img.shields.io/github/actions/workflow/status/dongyu19920904/ai-news-radar/update-news.yml?branch=master&label=update&style=flat-square)](https://github.com/dongyu19920904/ai-news-radar/actions/workflows/update-news.yml)
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](LICENSE)
 
-[在线页面](https://learnprompt.github.io/ai-news-radar/) · [English](README.en.md) · [伯乐Skill](skills/ai-news-radar/README.md) · [信息源策略](docs/SOURCE_COVERAGE.md)
+[在线页面](https://dongyu19920904.github.io/ai-news-radar/) · [English](README.en.md) · [伯乐Skill](skills/ai-news-radar/README.md) · [信息源策略](docs/SOURCE_COVERAGE.md)
 
 </div>
 
@@ -92,12 +92,12 @@ AI News Radar学习了现代新闻学的技术，不是简单堆信息源，一�
 
 ## 快速开始
 
-普通用户不用安装，直接打开在线页面即可。
+普通用户不用安装，直接打开[在线页面](https://dongyu19920904.github.io/ai-news-radar/)即可。
 
 想fork改造新版本，可以本地运行：
 
 ```bash
-git clone https://github.com/LearnPrompt/ai-news-radar.git
+git clone https://github.com/dongyu19920904/ai-news-radar.git
 cd ai-news-radar
 python3 -m venv .venv
 source .venv/bin/activate
@@ -147,6 +147,7 @@ python scripts/update_news.py --output-dir data --window-hours 24 --rss-opml fee
 
 - 默认每 30 分钟运行一次
 - 自动生成并提交 `data/*.json`
+- 更新完成后只把网页运行所需的静态文件和四个公开数据快照部署到 GitHub Pages
 - 如果没有设置 `FOLLOW_OPML_B64`，线上工作流会自动使用公开示例 `feeds/follow.example.opml`，让页面展示 RSS/OPML 能力
 - 如果设置 `FOLLOW_OPML_B64`，会优先自动解码为私有 `feeds/follow.opml`
 - 如果设置 `EMAIL_DIGEST_ENABLED=1`、`AGENTMAIL_API_KEY`、`AGENTMAIL_INBOX_ID`，会生成脱敏邮箱摘要

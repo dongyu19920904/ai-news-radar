@@ -11,6 +11,8 @@ concurrency:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   update:
@@ -86,3 +88,39 @@ jobs:
           fi
           git commit -m "chore: update ai news snapshot"
           git push
+
+  deploy:
+    needs: update
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout latest snapshot
+        uses: actions/checkout@v6
+        with:
+          ref: master
+
+      - name: Prepare public site
+        run: |
+          mkdir -p _site/assets _site/data
+          cp index.html tokens.css _site/
+          cp assets/app.js assets/core.js assets/logo.svg assets/styles.css _site/assets/
+          cp data/latest-24h.json data/latest-24h-all.json data/source-status.json data/waytoagi-7d.json _site/data/
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -2,114 +2,239 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AI News Radar｜24 小时 AI 更新雷达</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>AI News Radar｜三分钟吃透今天的 AI</title>
     <meta
       name="description"
-      content="自动整理过去 24 小时值得看的 AI、模型和开发者工具更新；伯乐Skill（Scout Skill）帮你从一堆信源里选出千里马。"
+      content="自动整理过去 24 小时值得看的 AI、模型和开发者工具更新。三分钟简报、雷达随机发现和本地收获卡，让 AI 资讯更有趣也更有用。"
     />
-    <link rel="canonical" href="https://learnprompt.github.io/ai-news-radar/" />
-    <meta property="og:title" content="AI News Radar｜24 小时 AI 更新雷达" />
+    <link rel="canonical" href="https://dongyu19920904.github.io/ai-news-radar/" />
+    <meta property="og:title" content="AI News Radar｜三分钟吃透今天的 AI" />
     <meta
       property="og:description"
-      content="自动整理过去 24 小时值得看的 AI、模型和开发者工具更新；伯乐Skill（Scout Skill）帮你从一堆信源里选出千里马。"
+      content="三分钟简报、雷达随机发现和本地收获卡。实时数据来自公开高信号 AI 来源。"
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://learnprompt.github.io/ai-news-radar/" />
+    <meta property="og:url" content="https://dongyu19920904.github.io/ai-news-radar/" />
     <meta property="og:site_name" content="AI News Radar" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="AI News Radar｜24 小时 AI 更新雷达" />
+    <meta name="twitter:title" content="AI News Radar｜三分钟吃透今天的 AI" />
     <meta
       name="twitter:description"
-      content="自动整理过去 24 小时值得看的 AI、模型和开发者工具更新；伯乐Skill（Scout Skill）帮你从一堆信源里选出千里马。"
+      content="实时 AI 信号、三分钟简报、随机发现和只保存在本机的收获卡。"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
     />
     <link rel="icon" href="./assets/logo.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="./assets/styles.css" />
   </head>
   <body>
-    <main class="shell">
-      <header class="hero">
-        <div class="hero-main">
-          <div class="hero-headline">
-            <img class="hero-logo" src="./assets/logo.svg" alt="AI News Radar Logo" />
-            <div>
-              <p class="hero-tag">AI NEWS RADAR</p>
-              <h1>24 小时 AI 更新雷达</h1>
-            </div>
+    <a class="skip-link" href="#mainContent">跳到主要内容</a>
+
+    <header class="site-nav" aria-label="主导航">
+      <div class="site-nav__inner">
+        <a class="wordmark" href="#top" aria-label="AI News Radar 首页">
+          <span class="wordmark__mark" aria-hidden="true"></span>
+          <span>AI News Radar</span>
+        </a>
+        <button
+          class="search-pill"
+          id="searchTrigger"
+          type="button"
+          aria-haspopup="dialog"
+          aria-controls="searchDialog"
+        >
+          <span class="search-pill__icon" aria-hidden="true"></span>
+          <span class="search-pill__label">搜索今天的信号</span>
+          <span class="search-pill__keys" aria-hidden="true"><kbd>Ctrl</kbd><kbd>K</kbd></span>
+        </button>
+        <a class="nav-status" href="#sourceDetails" id="navStatus">信号加载中</a>
+      </div>
+    </header>
+
+    <main id="mainContent">
+      <section class="hero section" id="top" aria-labelledby="heroTitle">
+        <div class="hero__copy">
+          <p class="hero__date" id="issueDate">TODAY · AI SIGNALS</p>
+          <h1 id="heroTitle">三分钟，吃透今天的 AI。</h1>
+          <p class="hero__lede">
+            先看三条，再决定哪里值得深挖。数据按新鲜度、AI 相关度、官方来源和来源多样性排序，
+            没有模型代写摘要。
+          </p>
+          <div class="hero__actions">
+            <a class="button button--push" href="#briefing">开始三分钟简报</a>
+            <button class="button button--soft" id="heroRadarButton" type="button">让雷达挑一条</button>
           </div>
-          <p class="hero-sub">
-            过去 24 小时值得看的 AI/科技更新，附 WaytoAGI 近 7 日变化。
+          <p class="hero__updated">
+            <span>本轮信号</span>
+            <strong id="updatedAt">加载中…</strong>
           </p>
         </div>
-        <div class="hero-meta">
-          <span class="updated-label">更新时间</span>
-          <span class="updated" id="updatedAt">加载中...</span>
+
+        <div class="hero__instrument" aria-label="实时信号仪表">
+          <div class="signal-orbit signal-orbit--outer" aria-hidden="true"></div>
+          <div class="signal-orbit signal-orbit--inner" aria-hidden="true"></div>
+          <button
+            class="radar-creature"
+            id="radarCreature"
+            type="button"
+            aria-label="随机发现一条当前筛选中的新闻"
+          >
+            <span class="radar-creature__eye" aria-hidden="true"></span>
+          </button>
+          <div class="hero__signal-count">
+            <strong id="heroSignalCount">—</strong>
+            <span>条 AI 信号</span>
+          </div>
+          <p>轻点中心，雷达会从当前结果里挑一条。</p>
         </div>
-
-        <section class="stats" id="stats"></section>
-
-        <section class="coverage-strip" id="coverageStrip" aria-label="Source coverage status"></section>
-      </header>
-
-      <section class="primary-controls">
-        <input id="searchInput" type="search" placeholder="搜索 AI 信号 / 来源" />
-        <div class="mode-hint" id="modeHint">AI强相关</div>
       </section>
 
-      <details class="advanced-panel">
-        <summary>
-          <span>高级筛选与源状态</span>
-          <span class="advanced-summary" id="advancedSummary">加载中...</span>
-        </summary>
-        <div class="advanced-content">
-          <div class="advanced-controls">
-            <label class="field">
-              <span>站点</span>
-              <select id="siteSelect">
-                <option value="">全部站点</option>
-              </select>
-            </label>
-            <div class="field">
-              <span>视图</span>
-              <div class="mode-switch">
-                <button id="modeAiBtn" class="mode-btn active" type="button">AI强相关</button>
-                <button id="modeAllBtn" class="mode-btn" type="button">全量</button>
-              </div>
-            </div>
-            <label id="allDedupeWrap" class="all-dedupe" for="allDedupeToggle">
-              <input id="allDedupeToggle" type="checkbox" checked />
-              <span class="all-dedupe-dot"></span>
-              <span id="allDedupeLabel">去重开</span>
-            </label>
-          </div>
-          <div class="source-health" id="sourceHealth">源状态加载中...</div>
-          <section class="site-pills" id="sitePills"></section>
-        </div>
-      </details>
+      <section class="stats-band">
+        <div class="section stats" id="stats" aria-label="今日数据概览"></div>
+        <div class="section coverage-strip" id="coverageStrip" aria-label="信息源覆盖状态"></div>
+      </section>
 
-      <section class="waytoagi-wrap">
-        <div class="waytoagi-head">
-          <h2>WaytoAGI 更新日志</h2>
-          <div class="waytoagi-tools">
-            <div class="waytoagi-switch">
-              <button id="waytoagiTodayBtn" class="waytoagi-btn active" type="button">最近更新日</button>
-              <button id="waytoagi7dBtn" class="waytoagi-btn" type="button">近7日</button>
+      <section class="briefing section" id="briefing" aria-labelledby="briefingTitle">
+        <header class="section-heading">
+          <div>
+            <h2 id="briefingTitle">今天先看这三条</h2>
+            <p>稳定规则挑选，不把算法说成编辑推荐。</p>
+          </div>
+          <span class="section-heading__meta" id="briefingStatus" aria-live="polite">正在选取…</span>
+        </header>
+        <div class="briefing-list" id="briefingList"></div>
+      </section>
+
+      <section class="playground-band">
+        <div class="section playground">
+          <article class="radar-game" aria-labelledby="radarTitle">
+            <div class="radar-game__copy">
+              <h2 id="radarTitle">今天不知道看什么？</h2>
+              <p>让雷达从你当前的搜索和筛选结果里挑一条。它只做发现，不会替你自动跳转。</p>
+              <button class="button button--push button--cyan" id="radarButton" type="button">
+                扫描一条信号
+              </button>
+              <p class="radar-game__status" id="radarStatus" aria-live="polite">等待扫描。</p>
             </div>
-            <span id="waytoagiUpdatedAt">加载中...</span>
+            <div class="radar-game__dial" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+          </article>
+
+          <article class="takeaway-card" aria-labelledby="takeawayTitle">
+            <div class="takeaway-card__head">
+              <div>
+                <h2 id="takeawayTitle">我的收获卡</h2>
+                <p>收藏一条，写下一句话。内容只保存在这台设备。</p>
+              </div>
+              <div class="progress-chip" id="takeawayProgress" aria-live="polite">0 / 3</div>
+            </div>
+            <p class="storage-notice" id="storageNotice" hidden></p>
+            <div class="saved-list" id="savedList"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="feed-section section" id="feed" aria-labelledby="listTitle">
+        <header class="feed-heading">
+          <div>
+            <h2 id="listTitle">AI 信号流</h2>
+            <p id="modeHint">AI 强相关</p>
+          </div>
+          <span id="resultCount" aria-live="polite">0 条</span>
+        </header>
+
+        <div class="primary-controls">
+          <label class="search-field" for="searchInput">
+            <span>在信号流中搜索</span>
+            <input id="searchInput" type="search" placeholder="例如：模型、Agent、开源" autocomplete="off" />
+          </label>
+          <button class="button button--soft filter-jump" id="advancedToggle" type="button">
+            筛选与源状态
+          </button>
+        </div>
+
+        <details class="advanced-panel" id="sourceDetails">
+          <summary>
+            <span>高级筛选与源状态</span>
+            <span class="advanced-summary" id="advancedSummary">加载中…</span>
+          </summary>
+          <div class="advanced-content">
+            <div class="advanced-controls">
+              <label class="field">
+                <span>站点</span>
+                <select id="siteSelect">
+                  <option value="">全部站点</option>
+                </select>
+              </label>
+              <div class="field">
+                <span>视图</span>
+                <div class="mode-switch" role="group" aria-label="新闻视图">
+                  <button id="modeAiBtn" class="mode-btn active" type="button" aria-pressed="true">
+                    AI 强相关
+                  </button>
+                  <button id="modeAllBtn" class="mode-btn" type="button" aria-pressed="false">
+                    全量
+                  </button>
+                </div>
+              </div>
+              <label id="allDedupeWrap" class="all-dedupe" for="allDedupeToggle">
+                <input id="allDedupeToggle" type="checkbox" checked />
+                <span class="all-dedupe-dot" aria-hidden="true"></span>
+                <span id="allDedupeLabel">去重开</span>
+              </label>
+            </div>
+            <div class="source-health" id="sourceHealth">源状态加载中…</div>
+            <section class="site-pills" id="sitePills" aria-label="按站点筛选"></section>
+          </div>
+        </details>
+
+        <div id="newsList" class="news-list"></div>
+        <button class="button button--soft load-more" id="loadMoreButton" type="button" hidden>
+          再看一些
+        </button>
+      </section>
+
+      <section class="waytoagi-wrap section" aria-labelledby="waytoagiTitle">
+        <div class="waytoagi-head">
+          <div>
+            <h2 id="waytoagiTitle">WaytoAGI 更新日志</h2>
+            <p>开源社区最近更新日与近 7 日变化。</p>
+          </div>
+          <div class="waytoagi-tools">
+            <div class="waytoagi-switch" role="group" aria-label="WaytoAGI 时间范围">
+              <button id="waytoagiTodayBtn" class="waytoagi-btn active" type="button" aria-pressed="true">
+                最近更新日
+              </button>
+              <button id="waytoagi7dBtn" class="waytoagi-btn" type="button" aria-pressed="false">
+                近 7 日
+              </button>
+            </div>
+            <span id="waytoagiUpdatedAt">加载中…</span>
           </div>
         </div>
         <div id="waytoagiMeta" class="waytoagi-meta"></div>
         <div id="waytoagiList" class="waytoagi-list"></div>
       </section>
-
-      <section class="list-wrap">
-        <div class="list-head">
-          <h2 id="listTitle">AI 信号流</h2>
-          <span id="resultCount">0 条</span>
-        </div>
-        <div id="newsList" class="news-list"></div>
-      </section>
     </main>
+
+    <footer class="footer-marquee" aria-label="页脚">
+      <div class="footer-marquee__track" aria-hidden="true">
+        <span>少看噪音 · 多留收获 · AI NEWS RADAR ·</span>
+        <span>少看噪音 · 多留收获 · AI NEWS RADAR ·</span>
+      </div>
+      <div class="footer-meta section">
+        <p>公开来源，静态部署，本地收获卡。</p>
+        <a href="https://github.com/dongyu19920904/ai-news-radar" rel="noopener noreferrer">
+          查看 GitHub 源码
+        </a>
+      </div>
+    </footer>
 
     <template id="itemTpl">
       <article class="news-card">
@@ -120,9 +245,62 @@
           <time class="time"></time>
         </div>
         <a class="title" target="_blank" rel="noopener noreferrer"></a>
+        <div class="news-card__actions">
+          <button class="save-button" type="button" aria-pressed="false">收藏</button>
+          <button class="note-button" type="button">记一句</button>
+        </div>
       </article>
     </template>
 
+    <dialog class="search-dialog" id="searchDialog" aria-labelledby="searchDialogTitle">
+      <div class="dialog-head">
+        <div>
+          <h2 id="searchDialogTitle">搜今天的信号</h2>
+          <p>输入标题、来源或站点。方向键选择，回车查看。</p>
+        </div>
+        <button class="icon-button" id="searchDialogClose" type="button" aria-label="关闭搜索">×</button>
+      </div>
+      <label class="dialog-search" for="paletteSearchInput">
+        <span>搜索词</span>
+        <input id="paletteSearchInput" type="search" placeholder="输入关键词" autocomplete="off" />
+      </label>
+      <div class="palette-results" id="paletteResults" role="listbox" aria-live="polite"></div>
+    </dialog>
+
+    <dialog class="story-dialog" id="storyDialog" aria-labelledby="storyDialogTitle">
+      <div class="dialog-head">
+        <div>
+          <p class="story-dialog__meta" id="storyDialogMeta"></p>
+          <h2 id="storyDialogTitle">新闻详情</h2>
+        </div>
+        <button class="icon-button" id="storyDialogClose" type="button" aria-label="关闭新闻详情">×</button>
+      </div>
+      <p class="story-dialog__hint" id="storyDialogHint"></p>
+      <a
+        class="button button--soft story-dialog__link"
+        id="storyDialogLink"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        阅读原文
+      </a>
+      <label class="takeaway-field" for="takeawayInput">
+        <span>我的一句话收获（可选）</span>
+        <textarea
+          id="takeawayInput"
+          rows="3"
+          maxlength="180"
+          placeholder="读完后，我想记住的是…"
+        ></textarea>
+        <span class="takeaway-field__helper" id="takeawayHelper">最多 180 字，只保存在本机。</span>
+      </label>
+      <div class="dialog-actions">
+        <button class="button button--push" id="saveTakeawayButton" type="button">收藏并保存</button>
+        <button class="button button--soft" id="removeTakeawayButton" type="button">移除收藏</button>
+      </div>
+    </dialog>
+
+    <script src="./assets/core.js" defer></script>
     <script src="./assets/app.js" defer></script>
   </body>
 </html>
