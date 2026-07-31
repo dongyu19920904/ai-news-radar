@@ -11,7 +11,7 @@ on:
       - "index.html"
       - "tokens.css"
   schedule:
-    - cron: "*/30 * * * *"
+    - cron: "17,47 * * * *"
 
 concurrency:
   group: update-ai-news-${{ github.ref }}
