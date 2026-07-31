@@ -46,6 +46,6 @@ test("page workflow publishes only the runtime artifact", () => {
   assert.match(workflow, /actions\/configure-pages@v5/);
   assert.match(workflow, /actions\/upload-pages-artifact@v4/);
   assert.match(workflow, /actions\/deploy-pages@v4/);
-  assert.match(workflow, /cp data\/latest-24h\.json data\/latest-24h-all\.json data\/source-status\.json data\/waytoagi-7d\.json _site\/data\//);
+  assert.match(workflow, /cp data\/latest-24h\.json data\/latest-24h-all\.json data\/briefing-lite\.json data\/source-status\.json data\/waytoagi-7d\.json _site\/data\//);
   assert.doesNotMatch(workflow, /cp\s+-r\s+data/);
 });
