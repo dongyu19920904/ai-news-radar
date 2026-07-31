@@ -9,6 +9,8 @@ on:
       - ".github/workflows/update-news.yml"
       - "assets/**"
       - "index.html"
+      - "requirements*.txt"
+      - "scripts/**"
       - "tokens.css"
   schedule:
     - cron: "17,47 * * * *"
