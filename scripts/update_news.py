@@ -2977,6 +2977,12 @@ def _briefing_lite_ai_score(item: dict[str, Any]) -> float:
     return max(0.0, min(1.0, score))
 
 
+def _briefing_lite_source_key(item: dict[str, Any]) -> str:
+    site_id = _briefing_lite_text(item.get("site_id"), 80)
+    source = _briefing_lite_text(item.get("source") or item.get("site_name"), 120)
+    return f"{site_id}::{source}" if site_id or source else ""
+
+
 def _briefing_lite_rank(item: dict[str, Any], now: datetime) -> float:
     relevance = _briefing_lite_ai_score(item)
     published_at = event_time(item)
@@ -2987,6 +2993,17 @@ def _briefing_lite_rank(item: dict[str, Any], now: datetime) -> float:
     official_bonus = 28.0 if str(item.get("site_id") or "") == "official_ai" else 0.0
     bilingual_bonus = 3.0 if item.get("title_zh") and item.get("title_en") else 0.0
     return relevance * 100.0 + freshness + official_bonus + bilingual_bonus
+
+
+def _briefing_lite_sort_key(item: dict[str, Any], now: datetime) -> tuple[Any, ...]:
+    title = item.get("title_zh") or item.get("title_bilingual") or item.get("title_original") or item.get("title")
+    return (
+        _briefing_lite_rank(item, now),
+        event_time(item) or datetime.min.replace(tzinfo=UTC),
+        str(item.get("id") or ""),
+        _briefing_lite_source_key(item),
+        _briefing_lite_text(title, 240),
+    )
 
 
 def build_briefing_lite_payload(
@@ -3002,46 +3019,42 @@ def build_briefing_lite_payload(
     if limit <= 0:
         selected: list[dict[str, Any]] = []
     else:
-        candidates: list[dict[str, Any]] = []
-        seen_urls: set[str] = set()
+        candidates_by_url: dict[str, dict[str, Any]] = {}
         for item in items:
             url = normalize_url(str(item.get("url") or ""))
             title = item.get("title_zh") or item.get("title_bilingual") or item.get("title_original") or item.get("title")
             if (
                 not url.startswith(("http://", "https://"))
-                or url in seen_urls
                 or len(_briefing_lite_text(title, 240)) < 6
                 or _briefing_lite_ai_score(item) < minimum_ai_score
             ):
                 continue
-            seen_urls.add(url)
-            candidates.append(item)
+            existing = candidates_by_url.get(url)
+            if existing is None or _briefing_lite_sort_key(item, now) > _briefing_lite_sort_key(existing, now):
+                candidates_by_url[url] = item
 
-        candidates.sort(
-            key=lambda item: (
-                _briefing_lite_rank(item, now),
-                event_time(item) or datetime.min.replace(tzinfo=UTC),
-                str(item.get("id") or ""),
-            ),
+        candidates = sorted(
+            candidates_by_url.values(),
+            key=lambda item: _briefing_lite_sort_key(item, now),
             reverse=True,
         )
 
         selected = []
-        selected_ids: set[int] = set()
+        selected_urls: set[str] = set()
         seen_sites: set[str] = set()
         for item in candidates:
-            site_key = str(item.get("site_id") or item.get("site_name") or item.get("source") or "")
+            site_key = _briefing_lite_source_key(item)
             if not site_key or site_key in seen_sites:
                 continue
             selected.append(item)
-            selected_ids.add(id(item))
+            selected_urls.add(normalize_url(str(item.get("url") or "")))
             seen_sites.add(site_key)
             if len(selected) >= limit:
                 break
 
         if len(selected) < limit:
             for item in candidates:
-                if id(item) in selected_ids:
+                if normalize_url(str(item.get("url") or "")) in selected_urls:
                     continue
                 selected.append(item)
                 if len(selected) >= limit:
@@ -3068,7 +3081,7 @@ def build_briefing_lite_payload(
         "window_hours": window_hours,
         "minimum_ai_score": minimum_ai_score,
         "item_count": len(compact_items),
-        "source_count": len({item["site_id"] or item["source"] for item in compact_items}),
+        "source_count": len({f"{item['site_id']}::{item['source']}" for item in compact_items}),
         "items": compact_items,
     }
 
