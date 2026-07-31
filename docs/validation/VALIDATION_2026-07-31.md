@@ -8,10 +8,10 @@ Date: 2026-07-31 (Asia/Shanghai)
 - Repository: <https://github.com/dongyu19920904/ai-news-radar>
 - Implementation commit:
   `52960f220dd8e816a0de2e74ca660218e8739a85`
-- Automated data commit:
-  `efa7b20118f035c007fc929dbccd4384dc34ea3f`
+- Final automated data commit:
+  `9169c7a57c1bec76c272826f13a4f4c92bf56f88`
 - Successful workflow:
-  <https://github.com/dongyu19920904/ai-news-radar/actions/runs/30603342528>
+  <https://github.com/dongyu19920904/ai-news-radar/actions/runs/30603688419>
 - GitHub Pages mode: custom workflow, public, HTTPS enforced
 
 The deployed page returned HTTP 200. Its title, canonical URL, core script, and
@@ -25,8 +25,8 @@ deployed and local runtime assets passed:
 - `assets/styles.css`:
   `7B5F5E62FF162471CB0CF7C7C76CAF73CE9F7BB71A4023518D10F9952F39AE10`
 
-The first production update generated its snapshot at
-`2026-07-31T04:08:21Z` and published 439 AI-focused items from 14 sites and 99
+The final production update generated its snapshot at
+`2026-07-31T04:15:37Z` and published 442 AI-focused items from 14 sites and 99
 source groups.
 
 ## Source handoff package
