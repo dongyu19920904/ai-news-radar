@@ -86,7 +86,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/latest-24h.json data/latest-24h-all.json data/archive.json data/source-status.json data/waytoagi-7d.json data/title-zh-cache.json
+          git add data/latest-24h.json data/latest-24h-all.json data/briefing-lite.json data/archive.json data/source-status.json data/waytoagi-7d.json data/title-zh-cache.json
           if [ -f data/email-digest.json ] && [ "$EMAIL_DIGEST_PUBLISH" = "1" ]; then
             git add data/email-digest.json
           fi
@@ -119,7 +119,7 @@ jobs:
           mkdir -p _site/assets _site/data
           cp index.html tokens.css _site/
           cp assets/app.js assets/core.js assets/logo.svg assets/styles.css _site/assets/
-          cp data/latest-24h.json data/latest-24h-all.json data/source-status.json data/waytoagi-7d.json _site/data/
+          cp data/latest-24h.json data/latest-24h-all.json data/briefing-lite.json data/source-status.json data/waytoagi-7d.json _site/data/
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

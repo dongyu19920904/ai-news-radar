@@ -55,6 +55,7 @@ AI News Radar从来都不是单纯把信息抓回来，
 - 支持OPML/RSS批量导入
 - 支持AgentMail邮箱订阅高质量AI日报
 - 输出24小时双视图，`AI强相关` 和 `全量`
+- 输出最多 8 条、适合其他站点轻量嵌入的 `data/briefing-lite.json`
 - 中英双语标题和站点分组
 - 兼容飞书文档，追加了WaytoAGI开源社区最近更新日和近7日变化
 

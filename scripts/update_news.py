@@ -42,6 +42,8 @@ BROWSER_UA = (
     "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
 )
 SH_TZ = ZoneInfo("Asia/Shanghai")
+BRIEFING_LITE_LIMIT = 8
+BRIEFING_LITE_MIN_AI_SCORE = 0.7
 WAYTOAGI_DEFAULT = (
     "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
 )
@@ -2963,6 +2965,114 @@ def build_latest_payloads(latest_payload: dict[str, Any]) -> tuple[dict[str, Any
     return slim_payload, all_payload
 
 
+def _briefing_lite_text(value: Any, limit: int) -> str:
+    return re.sub(r"\s+", " ", str(value or "")).strip()[:limit]
+
+
+def _briefing_lite_ai_score(item: dict[str, Any]) -> float:
+    try:
+        score = float(item.get("ai_score") or item.get("ai_relevance_score") or 0)
+    except (TypeError, ValueError):
+        return 0.0
+    return max(0.0, min(1.0, score))
+
+
+def _briefing_lite_rank(item: dict[str, Any], now: datetime) -> float:
+    relevance = _briefing_lite_ai_score(item)
+    published_at = event_time(item)
+    age_hours = 24.0
+    if published_at:
+        age_hours = max(0.0, (now - published_at).total_seconds() / 3600)
+    freshness = max(0.0, 24.0 - min(age_hours, 24.0))
+    official_bonus = 28.0 if str(item.get("site_id") or "") == "official_ai" else 0.0
+    bilingual_bonus = 3.0 if item.get("title_zh") and item.get("title_en") else 0.0
+    return relevance * 100.0 + freshness + official_bonus + bilingual_bonus
+
+
+def build_briefing_lite_payload(
+    items: list[dict[str, Any]],
+    *,
+    generated_at: str,
+    window_hours: int,
+    now: datetime,
+    limit: int = BRIEFING_LITE_LIMIT,
+    minimum_ai_score: float = BRIEFING_LITE_MIN_AI_SCORE,
+) -> dict[str, Any]:
+    """Build a small, deterministic cross-site payload for homepage embeds."""
+    if limit <= 0:
+        selected: list[dict[str, Any]] = []
+    else:
+        candidates: list[dict[str, Any]] = []
+        seen_urls: set[str] = set()
+        for item in items:
+            url = normalize_url(str(item.get("url") or ""))
+            title = item.get("title_zh") or item.get("title_bilingual") or item.get("title_original") or item.get("title")
+            if (
+                not url.startswith(("http://", "https://"))
+                or url in seen_urls
+                or len(_briefing_lite_text(title, 240)) < 6
+                or _briefing_lite_ai_score(item) < minimum_ai_score
+            ):
+                continue
+            seen_urls.add(url)
+            candidates.append(item)
+
+        candidates.sort(
+            key=lambda item: (
+                _briefing_lite_rank(item, now),
+                event_time(item) or datetime.min.replace(tzinfo=UTC),
+                str(item.get("id") or ""),
+            ),
+            reverse=True,
+        )
+
+        selected = []
+        selected_ids: set[int] = set()
+        seen_sites: set[str] = set()
+        for item in candidates:
+            site_key = str(item.get("site_id") or item.get("site_name") or item.get("source") or "")
+            if not site_key or site_key in seen_sites:
+                continue
+            selected.append(item)
+            selected_ids.add(id(item))
+            seen_sites.add(site_key)
+            if len(selected) >= limit:
+                break
+
+        if len(selected) < limit:
+            for item in candidates:
+                if id(item) in selected_ids:
+                    continue
+                selected.append(item)
+                if len(selected) >= limit:
+                    break
+
+    compact_items: list[dict[str, Any]] = []
+    for item in selected:
+        title = item.get("title_zh") or item.get("title_bilingual") or item.get("title_original") or item.get("title")
+        compact_items.append(
+            {
+                "id": _briefing_lite_text(item.get("id"), 120),
+                "title": _briefing_lite_text(title, 240),
+                "url": normalize_url(str(item.get("url") or "")),
+                "source": _briefing_lite_text(item.get("source") or item.get("site_name"), 120),
+                "site_id": _briefing_lite_text(item.get("site_id"), 80),
+                "published_at": item.get("published_at") or item.get("first_seen_at"),
+                "ai_score": round(_briefing_lite_ai_score(item), 3),
+                "category": _briefing_lite_text(item.get("ai_label"), 80),
+            }
+        )
+
+    return {
+        "generated_at": generated_at,
+        "window_hours": window_hours,
+        "minimum_ai_score": minimum_ai_score,
+        "item_count": len(compact_items),
+        "source_count": len({item["site_id"] or item["source"] for item in compact_items}),
+        "items": compact_items,
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Aggregate AI news updates from multiple sources")
     parser.add_argument("--output-dir", default="data", help="Directory for output JSON files")
@@ -2980,6 +3090,7 @@ def main() -> int:
     archive_path = output_dir / "archive.json"
     latest_path = output_dir / "latest-24h.json"
     latest_all_path = output_dir / "latest-24h-all.json"
+    briefing_lite_path = output_dir / "briefing-lite.json"
     status_path = output_dir / "source-status.json"
     waytoagi_path = output_dir / "waytoagi-7d.json"
     title_cache_path = output_dir / "title-zh-cache.json"
@@ -3181,6 +3292,13 @@ def main() -> int:
         "items_all": latest_items_all_dedup,
     }
 
+    briefing_lite_payload = build_briefing_lite_payload(
+        latest_items_ai_dedup,
+        generated_at=iso(now),
+        window_hours=args.window_hours,
+        now=now,
+    )
+
     archive_payload = {
         "generated_at": iso(now),
         "total_items": len(archive),
@@ -3248,6 +3366,10 @@ def main() -> int:
 
     latest_path.write_text(json.dumps(sanitize_public_payload(latest_payload), ensure_ascii=False, indent=2), encoding="utf-8")
     latest_all_path.write_text(json.dumps(sanitize_public_payload(latest_all_payload), ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    briefing_lite_path.write_text(
+        json.dumps(sanitize_public_payload(briefing_lite_payload), ensure_ascii=False, separators=(",", ":")),
+        encoding="utf-8",
+    )
     archive_path.write_text(
         json.dumps(sanitize_public_payload(archive_payload), ensure_ascii=False, separators=(",", ":")),
         encoding="utf-8",
@@ -3263,6 +3385,7 @@ def main() -> int:
 
     print(f"Wrote: {latest_path} ({len(latest_items)} items)")
     print(f"Wrote: {latest_all_path} ({len(latest_items_all_dedup)} all-mode items)")
+    print(f"Wrote: {briefing_lite_path} ({briefing_lite_payload['item_count']} items)")
     print(f"Wrote: {archive_path} ({len(archive)} items)")
     print(f"Wrote: {status_path}")
     if email_digest_payload is not None:
