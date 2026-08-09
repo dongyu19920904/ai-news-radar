@@ -6,11 +6,11 @@
 
 **Scout Skill helps you find the thoroughbreds among a pile of AI sources.**
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-green?style=flat-square)](https://dongyu19920904.github.io/ai-news-radar/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-green?style=flat-square)](https://radar.aivora.cn/)
 [![Actions](https://img.shields.io/github/actions/workflow/status/dongyu19920904/ai-news-radar/update-news.yml?branch=master&label=update&style=flat-square)](https://github.com/dongyu19920904/ai-news-radar/actions/workflows/update-news.yml)
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](LICENSE)
 
-[Live site](https://dongyu19920904.github.io/ai-news-radar/) · [中文](README.md) · [Scout Skill](skills/ai-news-radar/README.md) · [Source strategy](docs/SOURCE_COVERAGE.md)
+[Live site](https://radar.aivora.cn/) · [Aivora](https://www.aivora.cn/) · [AI Daily](https://news.aivora.cn/) · [中文](README.md) · [Scout Skill](skills/ai-news-radar/README.md) · [Source strategy](docs/SOURCE_COVERAGE.md)
 
 </div>
 

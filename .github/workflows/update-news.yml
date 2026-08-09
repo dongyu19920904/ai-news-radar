@@ -8,9 +8,13 @@ on:
     paths:
       - ".github/workflows/update-news.yml"
       - "assets/**"
+      - "CNAME"
       - "index.html"
+      - "llms.txt"
       - "requirements*.txt"
+      - "robots.txt"
       - "scripts/**"
+      - "sitemap.xml"
       - "tokens.css"
   schedule:
     - cron: "17,47 * * * *"
@@ -120,6 +124,7 @@ jobs:
         run: |
           mkdir -p _site/assets _site/data
           cp index.html tokens.css _site/
+          cp CNAME robots.txt sitemap.xml llms.txt _site/
           cp assets/app.js assets/core.js assets/logo.svg assets/styles.css _site/assets/
           cp data/latest-24h.json data/latest-24h-all.json data/briefing-lite.json data/source-status.json data/waytoagi-7d.json _site/data/
 

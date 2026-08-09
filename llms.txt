@@ -1,0 +1,29 @@
+# 爱窝啦 ai雷达
+
+> 爱窝啦 ai雷达是一个每 30 分钟左右自动更新的 24 小时 AI 信号索引，聚合公开来源中的 AI 模型、产品、研究、开源项目和开发者工具更新。
+
+## 主要页面
+
+- [爱窝啦 ai雷达](https://radar.aivora.cn/): 面向读者的实时 AI 信号、三分钟简报、搜索和来源健康页面。
+- [爱窝啦主站](https://www.aivora.cn/): 爱窝啦 AI 工具与账号服务主站。
+- [爱窝啦 AI 日报](https://news.aivora.cn/): 每日整理的 AI 资讯与观察。
+- [AI 生命延续学日报](https://news.aibioo.cn/): 聚焦生命科学、健康与 AI 交叉领域。
+
+## 机器可读数据
+
+- [24 小时 AI 强相关信号](https://radar.aivora.cn/data/latest-24h.json)
+- [24 小时全量信号](https://radar.aivora.cn/data/latest-24h-all.json)
+- [轻量简报](https://radar.aivora.cn/data/briefing-lite.json)
+- [来源健康状态](https://radar.aivora.cn/data/source-status.json)
+- [WaytoAGI 近 7 日更新](https://radar.aivora.cn/data/waytoagi-7d.json)
+
+## 方法与边界
+
+- 数据来自公开 RSS、Atom、OPML、公开 JSON 和公开网页。
+- 公开核心流程不依赖模型 API，不生成新闻正文摘要。
+- 页面保留原始来源链接，并按 AI 相关度、新鲜度、官方来源和来源多样性组织信号。
+- 收藏与收获卡只保存在访问者浏览器本地。
+
+## 项目
+
+- [GitHub 源码](https://github.com/dongyu19920904/ai-news-radar)

@@ -142,6 +142,34 @@ h3 {
   gap: var(--space-sm);
 }
 
+.ecosystem-nav {
+  display: flex;
+  overflow-x: auto;
+  padding-block: var(--space-2xs) var(--space-xs);
+  gap: var(--space-xs);
+  scrollbar-width: none;
+}
+
+.ecosystem-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.ecosystem-nav a {
+  flex: 0 0 auto;
+  padding: var(--space-2xs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  color: var(--color-ink-soft);
+  font-family: var(--font-label);
+  font-size: var(--text-xs);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ecosystem-nav a:hover {
+  background: var(--color-pear-soft);
+  color: var(--color-ink);
+}
+
 .wordmark {
   display: inline-flex;
   align-items: center;
@@ -1163,6 +1191,12 @@ textarea::placeholder {
   white-space: nowrap;
 }
 
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-lg);
+}
+
 button:disabled,
 input:disabled,
 select:disabled,
@@ -1322,6 +1356,10 @@ button:disabled:active,
 @media (min-width: 40rem) {
   .site-nav__inner {
     grid-template-columns: auto minmax(16rem, 1fr) auto;
+  }
+
+  .ecosystem-nav {
+    justify-content: center;
   }
 
   .search-pill {

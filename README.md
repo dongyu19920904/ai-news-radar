@@ -1,16 +1,16 @@
 <div align="center">
 
-# AI News Radar
+# 爱窝啦 ai雷达
 
 ## 24 小时 AI 更新雷达｜伯乐Skill
 
 **伯乐Skill（Scout Skill）帮你从一堆信源里选出千里马。**
 
-[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-green?style=flat-square)](https://dongyu19920904.github.io/ai-news-radar/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live-green?style=flat-square)](https://radar.aivora.cn/)
 [![Actions](https://img.shields.io/github/actions/workflow/status/dongyu19920904/ai-news-radar/update-news.yml?branch=master&label=update&style=flat-square)](https://github.com/dongyu19920904/ai-news-radar/actions/workflows/update-news.yml)
 [![License](https://img.shields.io/badge/license-MIT-green.svg?style=flat-square)](LICENSE)
 
-[在线页面](https://dongyu19920904.github.io/ai-news-radar/) · [English](README.en.md) · [伯乐Skill](skills/ai-news-radar/README.md) · [信息源策略](docs/SOURCE_COVERAGE.md)
+[在线页面](https://radar.aivora.cn/) · [爱窝啦主站](https://www.aivora.cn/) · [AI 日报](https://news.aivora.cn/) · [English](README.en.md) · [伯乐Skill](skills/ai-news-radar/README.md) · [信息源策略](docs/SOURCE_COVERAGE.md)
 
 </div>
 
@@ -93,7 +93,7 @@ AI News Radar学习了现代新闻学的技术，不是简单堆信息源，一�
 
 ## 快速开始
 
-普通用户不用安装，直接打开[在线页面](https://dongyu19920904.github.io/ai-news-radar/)即可。
+普通用户不用安装，直接打开[在线页面](https://radar.aivora.cn/)即可。
 
 想fork改造新版本，可以本地运行：
 

@@ -3,26 +3,62 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>AI News Radar｜三分钟吃透今天的 AI</title>
+    <title>爱窝啦 ai雷达｜24 小时 AI 资讯与开发者信号</title>
     <meta
       name="description"
-      content="自动整理过去 24 小时值得看的 AI、模型和开发者工具更新。三分钟简报、雷达随机发现和本地收获卡，让 AI 资讯更有趣也更有用。"
+      content="爱窝啦 ai雷达自动整理过去 24 小时值得关注的 AI 模型、产品、开源项目与开发者工具更新，提供三分钟简报、来源状态、搜索和双语标题。"
     />
-    <link rel="canonical" href="https://dongyu19920904.github.io/ai-news-radar/" />
-    <meta property="og:title" content="AI News Radar｜三分钟吃透今天的 AI" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://radar.aivora.cn/" />
+    <meta property="og:title" content="爱窝啦 ai雷达｜24 小时 AI 资讯与开发者信号" />
     <meta
       property="og:description"
-      content="三分钟简报、雷达随机发现和本地收获卡。实时数据来自公开高信号 AI 来源。"
+      content="自动聚合公开高信号来源，查看过去 24 小时 AI 模型、产品、研究、开源项目和开发者工具更新。"
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://dongyu19920904.github.io/ai-news-radar/" />
-    <meta property="og:site_name" content="AI News Radar" />
+    <meta property="og:url" content="https://radar.aivora.cn/" />
+    <meta property="og:site_name" content="爱窝啦 ai雷达" />
+    <meta property="og:locale" content="zh_CN" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="AI News Radar｜三分钟吃透今天的 AI" />
+    <meta name="twitter:title" content="爱窝啦 ai雷达｜24 小时 AI 资讯与开发者信号" />
     <meta
       name="twitter:description"
-      content="实时 AI 信号、三分钟简报、随机发现和只保存在本机的收获卡。"
+      content="实时 AI 信号、三分钟简报、来源健康状态、随机发现和只保存在本机的收获卡。"
     />
+    <meta name="theme-color" content="#f4f1e8" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://www.aivora.cn/#organization",
+            "name": "爱窝啦",
+            "url": "https://www.aivora.cn/",
+            "sameAs": ["https://github.com/dongyu19920904"]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://radar.aivora.cn/#website",
+            "name": "爱窝啦 ai雷达",
+            "alternateName": "AI News Radar",
+            "url": "https://radar.aivora.cn/",
+            "inLanguage": "zh-CN",
+            "publisher": { "@id": "https://www.aivora.cn/#organization" }
+          },
+          {
+            "@type": "CollectionPage",
+            "@id": "https://radar.aivora.cn/#webpage",
+            "name": "爱窝啦 ai雷达｜24 小时 AI 资讯与开发者信号",
+            "url": "https://radar.aivora.cn/",
+            "description": "自动整理过去 24 小时值得关注的 AI 模型、产品、开源项目与开发者工具更新。",
+            "isPartOf": { "@id": "https://radar.aivora.cn/#website" },
+            "about": ["人工智能", "AI 模型", "开发者工具", "开源项目"],
+            "inLanguage": "zh-CN"
+          }
+        ]
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -37,9 +73,9 @@
 
     <header class="site-nav" aria-label="主导航">
       <div class="site-nav__inner">
-        <a class="wordmark" href="#top" aria-label="AI News Radar 首页">
+        <a class="wordmark" href="#top" aria-label="爱窝啦 ai雷达首页">
           <span class="wordmark__mark" aria-hidden="true"></span>
-          <span>AI News Radar</span>
+          <span>爱窝啦 ai雷达</span>
         </a>
         <button
           class="search-pill"
@@ -54,16 +90,22 @@
         </button>
         <a class="nav-status" href="#sourceDetails" id="navStatus">信号加载中</a>
       </div>
+      <nav class="ecosystem-nav section" aria-label="爱窝啦网站导航">
+        <a href="https://www.aivora.cn/" target="_blank" rel="noopener noreferrer">爱窝啦主站</a>
+        <a href="https://news.aivora.cn/" target="_blank" rel="noopener noreferrer">AI 日报</a>
+        <a href="https://news.aibioo.cn/" target="_blank" rel="noopener noreferrer">AI 生命延续学日报</a>
+        <a href="https://yuyu.aivora.cn/" target="_blank" rel="noopener noreferrer">个人主页</a>
+      </nav>
     </header>
 
     <main id="mainContent">
       <section class="hero section" id="top" aria-labelledby="heroTitle">
         <div class="hero__copy">
-          <p class="hero__date" id="issueDate">TODAY · AI SIGNALS</p>
+          <p class="hero__date" id="issueDate">AIVORA · TODAY · AI SIGNALS</p>
           <h1 id="heroTitle">三分钟，吃透今天的 AI。</h1>
           <p class="hero__lede">
-            先看三条，再决定哪里值得深挖。数据按新鲜度、AI 相关度、官方来源和来源多样性排序，
-            没有模型代写摘要。
+            爱窝啦 ai雷达是一份自动更新的 24 小时 AI 信号索引。先看三条，再决定哪里值得深挖；
+            数据按新鲜度、AI 相关度、官方来源和来源多样性排序，没有模型代写摘要。
           </p>
           <div class="hero__actions">
             <a class="button button--push" href="#briefing">开始三分钟简报</a>
@@ -229,10 +271,12 @@
         <span>少看噪音 · 多留收获 · AI NEWS RADAR ·</span>
       </div>
       <div class="footer-meta section">
-        <p>公开来源，静态部署，本地收获卡。</p>
-        <a href="https://github.com/dongyu19920904/ai-news-radar" rel="noopener noreferrer">
-          查看 GitHub 源码
-        </a>
+        <p>爱窝啦出品 · 公开来源，静态部署，本地收获卡。</p>
+        <nav class="footer-links" aria-label="爱窝啦相关网站">
+          <a href="https://www.aivora.cn/" target="_blank" rel="noopener noreferrer">爱窝啦主站</a>
+          <a href="https://news.aivora.cn/" target="_blank" rel="noopener noreferrer">AI 日报</a>
+          <a href="https://github.com/dongyu19920904/ai-news-radar" target="_blank" rel="noopener noreferrer">GitHub 源码</a>
+        </nav>
       </div>
     </footer>
 
