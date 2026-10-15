@@ -97,6 +97,10 @@
 
   const SOURCE_KINDS = {
     official_ai: { label: "官方", tone: "official" },
+    curated_media: { label: "AI 媒体", tone: "newsletter" },
+    hackernews: { label: "开发者讨论", tone: "builders" },
+    github_trending: { label: "开源项目", tone: "builders" },
+    producthunt: { label: "新产品动态", tone: "blogs" },
     aibreakfast: { label: "日报", tone: "newsletter" },
     followbuilders: { label: "Builders/X", tone: "builders" },
     xapi: { label: "X API", tone: "builders" },
@@ -322,7 +326,7 @@
     state.currentStory = item;
     const saved = savedEntryFor(item);
     els.storyDialogTitle.textContent = itemTitle(item);
-    els.storyDialogMeta.textContent = [item.site_name, item.source, fmtTime(item.published_at || item.first_seen_at)]
+    els.storyDialogMeta.textContent = [item.site_name, item.source, itemTimeLabel(item)]
       .filter(Boolean)
       .join(" · ");
     els.storyDialogHint.textContent = prompt;
@@ -497,7 +501,13 @@
   }
 
   function itemMeta(item) {
-    return [item.site_name, item.source, fmtTime(item.published_at || item.first_seen_at)].filter(Boolean).join(" · ");
+    return [item.site_name, item.source, itemTimeLabel(item)].filter(Boolean).join(" · ");
+  }
+
+  function itemTimeLabel(item) {
+    const prefix = item.site_id === "github_trending" ? "收录于 "
+      : item.site_id === "producthunt" && item.recency_basis === "updated_at" ? "更新于 " : "";
+    return `${prefix}${fmtTime(core.activityDate(item))}`;
   }
 
   function bindStoryButton(button, item, prompt) {
@@ -514,8 +524,8 @@
     category.classList.add(`kind-${kind.tone}`);
     node.querySelector(".source").textContent = item.source || "未分区";
     const time = node.querySelector(".time");
-    const timeValue = item.published_at || item.first_seen_at;
-    time.textContent = fmtTime(timeValue);
+    const timeValue = core.activityDate(item);
+    time.textContent = itemTimeLabel(item);
     if (timeValue) time.dateTime = timeValue;
 
     const title = node.querySelector(".title");

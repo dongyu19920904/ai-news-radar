@@ -4,8 +4,10 @@
 from __future__ import annotations
 
 import argparse
+import base64
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from email.utils import parseaddr
+from html import unescape
 import hashlib
 import json
 import os
@@ -28,8 +30,10 @@ from urllib3.util.retry import Retry
 
 try:
     from scripts.ai_relevance import add_ai_relevance_fields, score_ai_relevance
+    from scripts.public_project_sources import fetch_github_projects, fetch_producthunt_projects
 except ModuleNotFoundError:  # pragma: no cover - direct `python scripts/update_news.py`
     from ai_relevance import add_ai_relevance_fields, score_ai_relevance
+    from public_project_sources import fetch_github_projects, fetch_producthunt_projects
 
 try:
     import feedparser
@@ -50,6 +54,8 @@ WAYTOAGI_DEFAULT = (
 WAYTOAGI_HISTORY_FALLBACK = "https://waytoagi.feishu.cn/wiki/FjiOwWp2giA7hRk6jjfcPioCnAc"
 
 RSS_FEED_REPLACEMENTS: dict[str, str] = {
+    "https://blogs.microsoft.com/ai/feed/": "https://devblogs.microsoft.com/foundry/feed/",
+    "https://news.microsoft.com/source/topics/ai/feed/": "https://devblogs.microsoft.com/foundry/feed/",
     "https://rsshub.app/infoq/recommend": "https://www.infoq.cn/feed",
     "https://rsshub.app/huggingface/blog-zh": "https://huggingface.co/blog/feed.xml",
     "https://rsshub.app/readhub/daily": "https://readhub.cn/rss",
@@ -117,6 +123,90 @@ OFFICIAL_AI_FEEDS: tuple[dict[str, str], ...] = (
     },
 )
 OFFICIAL_AI_MAX_AGE_DAYS = 45
+CURATED_AI_MEDIA_MAX_AGE_DAYS = 30
+CURATED_AI_MEDIA_FEEDS: tuple[dict[str, Any], ...] = (
+    {
+        "title": "The Decoder AI News",
+        "xml_url": "https://the-decoder.com/feed/",
+        "html_url": "https://the-decoder.com/",
+        "max_entries": 10,
+    },
+    {
+        # The Verge's AI topic RSS endpoint is not currently public/stable;
+        # keep the all-site RSS behind strict title-level AI filtering.
+        "title": "The Verge",
+        "xml_url": "https://www.theverge.com/rss/index.xml",
+        "html_url": "https://www.theverge.com/ai-artificial-intelligence",
+        "include_keywords": "ai,artificial intelligence,openai,anthropic,claude,chatgpt,gpt,gemini,llm,agent,copilot",
+        "max_entries": 6,
+        "strict_title_filter": True,
+    },
+    {
+        "title": "MarkTechPost Research",
+        "xml_url": "https://www.marktechpost.com/feed/",
+        "html_url": "https://www.marktechpost.com/",
+        "include_keywords": "paper,research,arxiv,benchmark,dataset,model,llm,agent,diffusion,transformer,multimodal,reasoning,inference,training,open-source",
+        "max_entries": 6,
+        "strict_title_filter": True,
+        "research_only": True,
+    },
+    {
+        "title": "Claude Code Releases",
+        "xml_url": "https://github.com/anthropics/claude-code/releases.atom",
+        "html_url": "https://github.com/anthropics/claude-code/releases",
+        "max_entries": 6,
+    },
+)
+
+HN_ALGOLIA_URL = "https://hn.algolia.com/api/v1/search_by_date"
+HN_ALGOLIA_QUERIES: tuple[str, ...] = (
+    "OpenAI",
+    "Anthropic",
+    "Claude Code",
+    "Claude",
+    "Gemini",
+    "Google AI",
+    "DeepSeek",
+    "Qwen",
+    "AI agent",
+    "AI coding",
+    "Codex",
+    "Cursor",
+    "MCP",
+    "LLM",
+    "GPT",
+    "Sora",
+    "Copilot",
+    "Nvidia AI",
+)
+HN_ALGOLIA_KEYWORDS: tuple[str, ...] = (
+    "openai",
+    "anthropic",
+    "claude",
+    "claude code",
+    "codex",
+    "cursor",
+    "mcp",
+    "gemini",
+    "deepseek",
+    "qwen",
+    "llm",
+    "gpt",
+    "sora",
+    "copilot",
+    "agent",
+    "ai coding",
+    "benchmark",
+    "eval",
+    "paper",
+    "model",
+    "inference",
+)
+HN_ALGOLIA_HITS_PER_QUERY = 35
+HN_ALGOLIA_MIN_KEYWORD_SCORE = 0.38
+HN_ALGOLIA_MIN_COMMENTS = 2
+HN_ALGOLIA_MIN_POINTS = 10
+HN_ALGOLIA_QUERY_PAUSE_SECONDS = 0.1
 AIBREAKFAST_JINA_URL = "https://r.jina.ai/https://aibreakfast.beehiiv.com/"
 AIHOT_FEED_URL = "https://aihot.virxact.com/feed.xml"
 AIHOT_FALLBACK_FEED_URLS = (
@@ -144,6 +234,14 @@ class RawItem:
     url: str
     published_at: datetime | None
     meta: dict[str, Any]
+
+
+class SourceItems(list[RawItem]):
+    """Allow feed collectors to expose partial failures in source health."""
+
+    def __init__(self, items: list[RawItem], details: dict[str, Any]):
+        super().__init__(items)
+        self.details = details
 
 
 def utc_now() -> datetime:
@@ -869,11 +967,19 @@ def fetch_iris(session: requests.Session, now: datetime) -> list[RawItem]:
 
     out: list[RawItem] = []
     for feed_name, feed_url in feeds:
+        if len(out) >= 100:
+            break
         try:
             if feedparser is not None:
-                parsed = feedparser.parse(feed_url)
+                # feedparser(url) makes an unbounded network read; parse bytes
+                # fetched through the same explicit timeout as other sources.
+                feed_response = session.get(feed_url, timeout=(8, 12))
+                feed_response.raise_for_status()
+                parsed = feedparser.parse(feed_response.content)
                 source_name = str(feed_name or getattr(parsed, "feed", {}).get("title") or "Iris Feed")
                 for entry in parsed.entries:
+                    if len(out) >= 100:
+                        break
                     title = str(entry.get("title", "")).strip()
                     url = str(entry.get("link", "")).strip()
                     if not title or not url:
@@ -1417,26 +1523,34 @@ def parse_follow_builders_items(feeds: dict[str, dict[str, Any]], now: datetime)
 
 def fetch_follow_builders(session: requests.Session, now: datetime) -> list[RawItem]:
     feeds: dict[str, dict[str, Any]] = {}
+    failures: list[dict[str, str]] = []
     for key, filename in (
         ("x", "feed-x.json"),
         ("blogs", "feed-blogs.json"),
         ("podcasts", "feed-podcasts.json"),
     ):
-        resp = session.get(
+        endpoints = (
             f"{FOLLOW_BUILDERS_FEED_BASE}/{filename}",
-            timeout=20,
-            headers={
-                "User-Agent": BROWSER_UA,
-                "Accept": "application/json, */*",
-            },
+            f"https://api.github.com/repos/zarazhangrui/follow-builders/contents/{filename}?ref=main",
         )
-        resp.raise_for_status()
-        feeds[key] = resp.json()
+        for endpoint in endpoints:
+            try:
+                resp = session.get(endpoint, timeout=20, headers={"User-Agent": BROWSER_UA,
+                    "Accept": "application/vnd.github.raw+json" if "api.github.com" in endpoint else "application/json"})
+                resp.raise_for_status()
+                payload = resp.json()
+                if isinstance(payload, dict) and payload.get("encoding") == "base64":
+                    payload = json.loads(base64.b64decode(payload["content"]))
+                feeds[key] = payload
+                break
+            except Exception as exc:
+                if endpoint == endpoints[-1]:
+                    failures.append({"feed": filename, "error": str(exc)[:250]})
 
     out = parse_follow_builders_items(feeds, now)
     if not out:
         raise ValueError("No Follow Builders items parsed")
-    return out
+    return SourceItems(out, {"partial_failures": len(failures), "failed_feeds": failures})
 
 
 def is_hubtoday_placeholder_title(title: str) -> bool:
@@ -1488,99 +1602,46 @@ def normalize_aihubtoday_records(items: list[dict[str, Any]]) -> list[dict[str, 
     return keep
 
 
+AIHUBTODAY_RSS_URL = "https://hex2077.dev/rss-zh-CN.xml"
+
+
 def fetch_ai_hubtoday(session: requests.Session, now: datetime) -> list[RawItem]:
     site_id = "aihubtoday"
     site_name = "AI HubToday"
-
-    r = session.get("https://ai.hubtoday.app/", timeout=30)
+    # ai.hubtoday.app migrated to hex2077.dev (a Next.js SPA), so the old HTML
+    # selectors no longer match and produced 0 usable items. Read the site's
+    # structured RSS feed instead: every entry has a real title, link and date,
+    # which is far more robust than scraping a client-rendered page.
+    r = session.get(AIHUBTODAY_RSS_URL, timeout=30)
     r.raise_for_status()
-    soup = BeautifulSoup(r.text, "html.parser")
-
-    issue_date = None
-    text = soup.get_text(" ", strip=True)
-    m = re.search(r"AI资讯日报\s*(\d{4})/(\d{1,2})/(\d{1,2})", text)
-    if not m:
-        m = re.search(r"AI资讯日报\s*(\d{4})-(\d{1,2})-(\d{1,2})", text)
-    if m:
-        issue_date = datetime(
-            int(m.group(1)),
-            int(m.group(2)),
-            int(m.group(3)),
-            tzinfo=UTC,
-        )
+    if feedparser is not None:
+        entries = list(feedparser.parse(r.content).entries)
+    else:
+        entries = parse_feed_entries_via_xml(r.content)
 
     out: list[RawItem] = []
     seen_urls: set[str] = set()
-
-    def add_item(title: str, href: str, source: str = "Daily Digest", fallback_title: str | None = None) -> None:
-        title = (title or "").strip()
-        href = (href or "").strip()
-        fallback_title = (fallback_title or "").strip()
-        if is_hubtoday_generic_anchor_title(title) and fallback_title:
-            title = fallback_title
-        if len(title) < 5 or not href.startswith("http"):
-            return
-        if title in {"自媒体账号"} or "source.hubtoday.app" in href or is_hubtoday_generic_anchor_title(title):
-            return
-        key_url = normalize_url(href)
+    for entry in entries:
+        title, link, published = feed_entry_title_link_published(entry, now)
+        if len(title) < 5 or not link.startswith("http"):
+            continue
+        if is_hubtoday_placeholder_title(title):
+            continue
+        key_url = normalize_url(link)
         if key_url in seen_urls:
-            return
+            continue
         seen_urls.add(key_url)
         out.append(
             RawItem(
                 site_id=site_id,
                 site_name=site_name,
-                source=source,
+                source="Daily Digest",
                 title=title,
-                url=href,
-                published_at=issue_date,
-                meta={},
+                url=link,
+                published_at=published,
+                meta={"feed_url": AIHUBTODAY_RSS_URL},
             )
         )
-
-    for p in soup.select("article .content li p"):
-        link = p.select_one("a[href^='http']")
-        if not link:
-            continue
-        strong = p.find("strong")
-        strong_title = strong.get_text(" ", strip=True) if strong else ""
-        add_item(strong_title, link.get("href") or "", source="Daily Digest")
-
-    for a in soup.select("article .content a[target='_blank']"):
-        fallback_title = ""
-        p = a.find_parent("p")
-        if p:
-            strong = p.find("strong")
-            if strong:
-                fallback_title = strong.get_text(" ", strip=True)
-        add_item(a.get_text(" ", strip=True), a.get("href") or "", fallback_title=fallback_title)
-
-    # include article-level links without target='_blank' (e.g. GitHub 链接)
-    for a in soup.select("article a[href^='http']"):
-        fallback_title = ""
-        p = a.find_parent("p")
-        if p:
-            strong = p.find("strong")
-            if strong:
-                fallback_title = strong.get_text(" ", strip=True)
-        add_item(a.get_text(" ", strip=True), a.get("href") or "", fallback_title=fallback_title)
-
-    if not out:
-        # fallback: parse all external links in page when article container changes
-        for a in soup.select("a[href^='http']"):
-            fallback_title = ""
-            p = a.find_parent("p")
-            if p:
-                strong = p.find("strong")
-                if strong:
-                    fallback_title = strong.get_text(" ", strip=True)
-            add_item(
-                a.get_text(" ", strip=True),
-                a.get("href") or "",
-                source="Page Fallback",
-                fallback_title=fallback_title,
-            )
-
     return out
 
 
@@ -1850,10 +1911,247 @@ def fetch_newsnow(session: requests.Session, now: datetime) -> list[RawItem]:
     return out
 
 
+def feed_entry_title_link_published(entry: dict[str, Any], now: datetime) -> tuple[str, str, datetime | None]:
+    title = unescape(maybe_fix_mojibake(str(entry.get("title", "")).strip()))
+    link = str(entry.get("link", "")).strip()
+    published = (
+        parse_date_any(entry.get("published"), now)
+        or parse_date_any(entry.get("updated"), now)
+        or parse_date_any(entry.get("pubDate"), now)
+    )
+    return title, link, published
+
+
+def feed_keywords(feed: dict[str, Any]) -> list[str]:
+    return [
+        keyword.strip().lower()
+        for keyword in str(feed.get("include_keywords") or "").split(",")
+        if keyword.strip()
+    ]
+
+
+def curated_feed_entry_allowed(feed: dict[str, Any], title: str, link: str) -> bool:
+    include_keywords = feed_keywords(feed)
+    if not include_keywords:
+        return True
+    haystack = title.lower()
+    if not feed.get("strict_title_filter"):
+        haystack = f"{haystack} {link.lower()} {feed.get('title', '').lower()}"
+    return any(re.search(rf"(?<![a-z0-9]){re.escape(keyword)}(?![a-z0-9])", haystack)
+               for keyword in include_keywords)
+
+
+def parse_curated_ai_media_feed_items(
+    feed_content: bytes,
+    feed: dict[str, Any],
+    now: datetime,
+) -> list[RawItem]:
+    site_id = "curated_media"
+    site_name = "Curated Media"
+    feed_url = str(feed["xml_url"])
+    feed_title = str(feed["title"])
+
+    if feedparser is not None:
+        parsed = feedparser.parse(feed_content)
+        entries = list(parsed.entries)
+    else:
+        entries = parse_feed_entries_via_xml(feed_content)
+
+    out: list[RawItem] = []
+    seen_urls: set[str] = set()
+    max_entries = max(1, int(feed.get("max_entries") or 8))
+    for entry in entries:
+        title, link, published = feed_entry_title_link_published(entry, now)
+        if not title or not link or not published:
+            continue
+        if published < now - timedelta(days=CURATED_AI_MEDIA_MAX_AGE_DAYS):
+            continue
+        if not curated_feed_entry_allowed(feed, title, link):
+            continue
+        normalized_url = normalize_url(link)
+        if normalized_url in seen_urls:
+            continue
+        seen_urls.add(normalized_url)
+        out.append(
+            RawItem(
+                site_id=site_id,
+                site_name=site_name,
+                source=feed_title,
+                title=title,
+                url=link,
+                published_at=published,
+                meta={
+                    "feed_url": feed_url,
+                    "feed_home": feed.get("html_url") or "",
+                    "research_only": bool(feed.get("research_only")),
+                    "strict_title_filter": bool(feed.get("strict_title_filter")),
+                },
+            )
+        )
+        if len(out) >= max_entries:
+            break
+
+    return out
+
+
+def fetch_curated_ai_media(session: requests.Session, now: datetime) -> list[RawItem]:
+    out: list[RawItem] = []
+    failures: list[str] = []
+    feed_statuses: list[dict[str, Any]] = []
+
+    for feed in CURATED_AI_MEDIA_FEEDS:
+        count = 0
+        error = None
+        try:
+            resp = session.get(
+                str(feed["xml_url"]),
+                timeout=20,
+                headers={
+                    "User-Agent": BROWSER_UA,
+                    "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+                    "Accept": "application/rss+xml, application/atom+xml, application/xml, text/xml, */*",
+                },
+            )
+            resp.raise_for_status()
+            rows = parse_curated_ai_media_feed_items(resp.content, feed, now)
+            count = len(rows)
+            out.extend(rows)
+        except Exception as exc:
+            error = str(exc)[:250]
+            failures.append(str(feed.get("title") or feed.get("xml_url") or "unknown"))
+        feed_statuses.append({"feed_title": feed["title"], "feed_url": feed["xml_url"],
+                              "ok": error is None, "item_count": count, "error": error})
+
+    if not out and failures:
+        raise ValueError(f"No curated media items parsed; failed feeds: {', '.join(failures[:4])}")
+    return SourceItems(out, {"feeds": feed_statuses, "partial_failures": len(failures)})
+
+def hn_algolia_keyword_score(title: str) -> float:
+    blob = title.lower()
+    hits = 0
+    for keyword in HN_ALGOLIA_KEYWORDS:
+        if re.search(rf"(?<![a-z0-9]){re.escape(keyword)}(?![a-z0-9])", blob):
+            hits += 1
+    return min(1.0, hits / 3)
+
+
+def parse_hn_algolia_hits(payloads: list[tuple[str, dict[str, Any]]], now: datetime) -> list[RawItem]:
+    seen_ids: set[str] = set()
+    out: list[RawItem] = []
+
+    for query, payload in payloads:
+        hits = payload.get("hits")
+        if not isinstance(hits, list):
+            continue
+
+        for hit in hits:
+            if not isinstance(hit, dict):
+                continue
+            object_id = str(hit.get("objectID") or "").strip()
+            if not object_id or object_id in seen_ids:
+                continue
+            seen_ids.add(object_id)
+
+            title = maybe_fix_mojibake(str(first_non_empty(hit.get("title"), hit.get("story_title"))))
+            if not title or hn_algolia_keyword_score(title) < HN_ALGOLIA_MIN_KEYWORD_SCORE:
+                continue
+
+            try:
+                comments = int(hit.get("num_comments") or 0)
+            except Exception:
+                comments = 0
+            try:
+                points = int(hit.get("points") or 0)
+            except Exception:
+                points = 0
+            if comments < HN_ALGOLIA_MIN_COMMENTS and points < HN_ALGOLIA_MIN_POINTS:
+                continue
+
+            item_url = str(hit.get("url") or "").strip()
+            hn_url = f"https://news.ycombinator.com/item?id={object_id}"
+            published = parse_date_any(hit.get("created_at"), now) or parse_unix_timestamp(hit.get("created_at_i")) or now
+
+            out.append(
+                RawItem(
+                    site_id="hackernews",
+                    site_name="Hacker News",
+                    source="HN Algolia · AI 24h",
+                    title=title,
+                    url=item_url or hn_url,
+                    published_at=published,
+                    meta={
+                        "hn_id": object_id,
+                        "hn_url": hn_url,
+                        "hn_query": query,
+                        "hn_comments": comments,
+                        "hn_points": points,
+                    },
+                )
+            )
+
+    out.sort(
+        key=lambda item: (
+            int(item.meta.get("hn_comments") or 0),
+            int(item.meta.get("hn_points") or 0),
+            item.published_at or datetime.min.replace(tzinfo=UTC),
+        ),
+        reverse=True,
+    )
+    return out
+
+
+def fetch_hacker_news_algolia(session: requests.Session, now: datetime) -> list[RawItem]:
+    start_ts = int((now - timedelta(hours=24)).timestamp())
+    payloads: list[tuple[str, dict[str, Any]]] = []
+    errors: list[str] = []
+
+    for query in HN_ALGOLIA_QUERIES:
+        try:
+            response = session.get(
+                HN_ALGOLIA_URL,
+                params={
+                    "query": query,
+                    "tags": "story",
+                    "numericFilters": f"created_at_i>{start_ts}",
+                    "hitsPerPage": HN_ALGOLIA_HITS_PER_QUERY,
+                },
+                headers={"Accept": "application/json"},
+                timeout=16,
+            )
+            response.raise_for_status()
+            payloads.append((query, response.json()))
+        except Exception as exc:
+            errors.append(f"{query}: {exc}")
+        time.sleep(HN_ALGOLIA_QUERY_PAUSE_SECONDS)
+
+    if not payloads and errors:
+        raise ValueError(f"HN Algolia queries failed: {'; '.join(errors[:3])}")
+
+    return parse_hn_algolia_hits(payloads, now)
+
+def project_raw_items(projects: list[dict[str, Any]]) -> list[RawItem]:
+    return [RawItem(
+        site_id=p["site_id"], site_name=p["site_name"], source=p["site_name"],
+        title=f"{p['project_name']} — {p['summary']}" if p["summary"] else p["project_name"],
+        url=p["url"], published_at=p["published_at"],
+        meta={"summary": p["summary"], "project_candidate": p,
+              "updated_at": iso(p.get("updated_at")), "observed_at": iso(p.get("observed_at")),
+              "recency_basis": p.get("recency_basis")},
+    ) for p in projects]
+
+
+def fetch_github_trending(session: requests.Session, now: datetime) -> list[RawItem]:
+    return project_raw_items(fetch_github_projects(session, now))
+
+
+def fetch_producthunt(session: requests.Session, now: datetime) -> list[RawItem]:
+    return project_raw_items(fetch_producthunt_projects(session, now))
+
+
 def collect_all(session: requests.Session, now: datetime) -> tuple[list[RawItem], list[dict[str, Any]]]:
     tasks = [
         ("official_ai", "Official AI Updates", fetch_official_ai_updates),
-        ("aibreakfast", "AI Breakfast", fetch_ai_breakfast),
+        ("curated_media", "Curated Media", fetch_curated_ai_media),
         ("followbuilders", "Follow Builders", fetch_follow_builders),
         ("techurls", "TechURLs", fetch_techurls),
         ("buzzing", "Buzzing", fetch_buzzing),
@@ -1861,36 +2159,44 @@ def collect_all(session: requests.Session, now: datetime) -> tuple[list[RawItem]
         ("bestblogs", "BestBlogs", fetch_bestblogs),
         ("tophub", "TopHub", fetch_tophub),
         ("zeli", "Zeli", fetch_zeli),
+        ("hackernews", "Hacker News", fetch_hacker_news_algolia),
         ("aihubtoday", "AI HubToday", fetch_ai_hubtoday),
         ("aibase", "AIbase", fetch_aibase),
         ("aihot", "AI HOT", fetch_aihot),
         ("newsnow", "NewsNow", fetch_newsnow),
+        ("github_trending", "GitHub Trending", fetch_github_trending),
+        ("producthunt", "Product Hunt", fetch_producthunt),
     ]
 
     raw_items: list[RawItem] = []
     statuses: list[dict[str, Any]] = []
 
-    for site_id, site_name, fn in tasks:
+    def collect_one(task: tuple) -> tuple[list[RawItem], dict[str, Any]]:
+        site_id, site_name, fn = task
         start = time.perf_counter()
         error = None
         count = 0
+        details: dict[str, Any] = {}
+        items: list[RawItem] = []
         try:
-            items = fn(session, now)
+            with create_session() as source_session:
+                items = fn(source_session, now)
+            details = getattr(items, "details", {})
             count = len(items)
-            raw_items.extend(items)
         except Exception as exc:
             error = str(exc)
         elapsed_ms = int((time.perf_counter() - start) * 1000)
-        statuses.append(
-            {
-                "site_id": site_id,
-                "site_name": site_name,
-                "ok": error is None,
-                "item_count": count,
-                "duration_ms": elapsed_ms,
-                "error": error,
-            }
-        )
+        print(f"Source {site_id}: {count} items, {'failed' if error else 'ok'}, {elapsed_ms} ms", flush=True)
+        return items, {
+            "site_id": site_id, "site_name": site_name, "ok": error is None,
+            "item_count": count, "duration_ms": elapsed_ms, "error": error, **details,
+        }
+
+    # Sessions are isolated per worker; map keeps the configured source order.
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        for items, status in executor.map(collect_one, tasks):
+            raw_items.extend(items)
+            statuses.append(status)
 
     return raw_items, statuses
 
@@ -2293,6 +2599,10 @@ def load_archive(path: Path) -> dict[str, dict[str, Any]]:
 
 
 def event_time(record: dict[str, Any]) -> datetime | None:
+    if record.get("site_id") == "producthunt" and record.get("recency_basis") == "updated_at":
+        return parse_iso(record.get("updated_at"))
+    if record.get("site_id") == "github_trending":
+        return parse_iso(record.get("observed_at"))
     # RSS sources must rely on the source's publish time only.
     # first_seen_at is fetch time and would falsely mark historical items as "24h".
     if str(record.get("site_id") or "") == "opmlrss":
@@ -2874,10 +3184,12 @@ def add_bilingual_fields(
         if title and url and has_cjk(title):
             zh_by_url[url] = title
 
-    translated_now = 0
+    translation_attempts = 0
+    consecutive_failures = 0
+    translation_deadline = time.monotonic() + 60
 
     def enrich(item: dict[str, Any], allow_translate: bool) -> dict[str, Any]:
-        nonlocal translated_now
+        nonlocal translation_attempts, consecutive_failures
         out = dict(item)
         title = str(out.get("title") or "").strip()
         url = normalize_url(str(out.get("url") or ""))
@@ -2899,12 +3211,16 @@ def add_bilingual_fields(
         zh_title = zh_by_url.get(url)
         if not zh_title:
             zh_title = cache.get(title)
-        if not zh_title and allow_translate and translated_now < max_new_translations:
+        if (not zh_title and allow_translate and translation_attempts < max_new_translations
+                and consecutive_failures < 3 and time.monotonic() < translation_deadline):
+            translation_attempts += 1
             tr = translate_to_zh_cn(session, title)
             if tr and has_cjk(tr):
                 zh_title = tr
                 cache[title] = tr
-                translated_now += 1
+                consecutive_failures = 0
+            else:
+                consecutive_failures += 1
 
         if zh_title:
             out["title_zh"] = zh_title
@@ -3137,6 +3453,7 @@ def main() -> int:
         )
 
     if args.rss_opml:
+        print("Collecting configured OPML feeds", flush=True)
         opml_path = Path(args.rss_opml).expanduser()
         if opml_path.exists():
             rss_items, rss_summary_status, rss_feed_statuses = fetch_opml_rss(
@@ -3199,6 +3516,13 @@ def main() -> int:
                     existing["published_at"] = iso(raw.published_at)
             existing["last_seen_at"] = iso(now)
 
+        if raw.site_id in {"github_trending", "producthunt"}:
+            # Keep publication, ranking observation and product update distinct.
+            for key in ("updated_at", "observed_at", "recency_basis"):
+                value = raw.meta.get(key)
+                if value is not None:
+                    archive[item_id][key] = iso(value) if isinstance(value, datetime) else value
+
     # Prune old archive
     keep_after = now - timedelta(days=args.archive_days)
     pruned: dict[str, dict[str, Any]] = {}
@@ -3240,6 +3564,7 @@ def main() -> int:
     latest_items_all.sort(key=lambda x: event_time(x) or datetime.min.replace(tzinfo=UTC), reverse=True)
     latest_items = [record for record in latest_items_all if record.get("ai_is_related", is_ai_related_record(record))]
     title_cache = load_title_zh_cache(title_cache_path)
+    print(f"Scored {len(latest_items)} AI candidates; enriching titles", flush=True)
     latest_items, latest_items_all, title_cache = add_bilingual_fields(
         latest_items,
         latest_items_all,
@@ -3360,6 +3685,7 @@ def main() -> int:
     }
 
     try:
+        print("Collecting WaytoAGI update metadata", flush=True)
         waytoagi_payload = fetch_waytoagi_recent_7d(session, now, WAYTOAGI_DEFAULT)
     except Exception as exc:
         waytoagi_payload = {

@@ -25,6 +25,13 @@ test("safeHttpUrl accepts only http and https", () => {
   assert.equal(core.safeHttpUrl("not a url"), "");
 });
 
+test("project timestamps retain the difference between updates and publication", () => {
+  assert.equal(core.activityDate({ site_id: "producthunt", recency_basis: "updated_at",
+    published_at: "2026-09-01T00:00:00Z", updated_at: "2026-10-16T05:00:00Z" }), "2026-10-16T05:00:00Z");
+  assert.equal(core.activityDate({ site_id: "github_trending", published_at: null,
+    observed_at: "2026-10-16T05:00:00Z" }), "2026-10-16T05:00:00Z");
+});
+
 test("briefing selection is deterministic, fresh, and source-diverse", () => {
   const items = [
     item({ url: "https://a.example/1", site_id: "official_ai", ai_relevance_score: 0.95 }),

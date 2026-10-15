@@ -34,11 +34,11 @@
         htmlUrl="https://blog.google/technology/ai/"
       />
       <outline
-        text="Microsoft AI Blog"
-        title="Microsoft AI Blog"
+        text="Microsoft Foundry Blog"
+        title="Microsoft Foundry Blog"
         type="rss"
-        xmlUrl="https://blogs.microsoft.com/ai/feed/"
-        htmlUrl="https://blogs.microsoft.com/ai/"
+        xmlUrl="https://devblogs.microsoft.com/foundry/feed/"
+        htmlUrl="https://devblogs.microsoft.com/foundry/"
       />
     </outline>
     <outline text="AI Media and Builders">

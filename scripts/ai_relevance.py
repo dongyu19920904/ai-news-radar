@@ -143,6 +143,10 @@ AI_RELEVANCE_THRESHOLD = 0.65
 
 SOURCE_PRIORS = {
     "official_ai": 0.35,
+    "curated_media": 0.18,
+    "hackernews": 0.15,
+    "github_trending": 0.15,
+    "producthunt": 0.15,
     "aibase": 0.45,
     "aihot": 0.45,
     "aihubtoday": 0.45,

@@ -49,7 +49,8 @@ AI News Radar从来都不是单纯把信息抓回来，
 ## 现在能做什么
 
 - 追踪官方 AI 节点，OpenAI News、OpenAI Codex Changelog、OpenAI Skills、Anthropic、Google DeepMind、Google AI、Hugging Face、GitHub AI 等
-- 读取高信号日报和Newsletter公开来源，例如 AI Breakfast
+- 读取精选 AI 媒体的公开 RSS：The Decoder、MarkTechPost、The Verge 与 Claude Code Releases（TechCrunch 重复率过高、VentureBeat 缺少近期内容，暂不新增直接采集）
+- 通过定向 HN Algolia、GitHub Trending 和 Product Hunt 发现开发者讨论与新项目
 - 读取网页自带的feed，例如 Follow Builders 的 X builders、Anthropic Engineering、Claude Blog、AI podcasts
 - 同时接入多个公开聚合源，例如 AI HOT，补足普通官方源看不到的盲区
 - 支持OPML/RSS批量导入
@@ -146,9 +147,9 @@ python scripts/update_news.py --output-dir data --window-hours 24 --rss-opml fee
 
 `.github/workflows/update-news.yml` 已经配置好定时任务。
 
-- 默认每 30 分钟运行一次
+- 工作日高峰每小时运行，其他时段约 3–4 小时一次，采用原项目的分时段节奏
 - 自动生成并提交 `data/*.json`
-- 更新完成后只把网页运行所需的静态文件和四个公开数据快照部署到 GitHub Pages
+- 更新完成后只把网页运行所需的静态文件和五个公开数据快照部署到 GitHub Pages，并检查线上快照时间
 - 如果没有设置 `FOLLOW_OPML_B64`，线上工作流会自动使用公开示例 `feeds/follow.example.opml`，让页面展示 RSS/OPML 能力
 - 如果设置 `FOLLOW_OPML_B64`，会优先自动解码为私有 `feeds/follow.opml`
 - 如果设置 `EMAIL_DIGEST_ENABLED=1`、`AGENTMAIL_API_KEY`、`AGENTMAIL_INBOX_ID`，会生成脱敏邮箱摘要
@@ -156,6 +157,8 @@ python scripts/update_news.py --output-dir data --window-hours 24 --rss-opml fee
 - 如果设置 `X_API_ENABLED=1`、`X_BEARER_TOKEN` 和预算变量，会在每日指定UTC窗口用官方X API抓取少量公开Post；默认关闭，且当前X API按返回资源计费
 
 默认情况下，本项目不需要任何API Key就能跑核心流程。高级源配置模板见 `examples/advanced-sources.env.example`，预算说明见 `docs/research/advanced-source-free-tier-budget-2026-05-10.md`，X API演示配置见 `docs/guides/x-api-demo-config.md`；单账号/单newsletter演示见 `docs/guides/rileybrown-alphasignal-demo.md`。
+
+停更恢复和 2026-10-16 来源同步记录见 [恢复记录](docs/RECOVERY_2026-10-16.md)。GitHub 若暂停 fork 工作流，仓库维护者需要先在 Actions 页面重新启用；仅修改 cron 不会解除 GitHub 的暂停。
 
 ## License
 

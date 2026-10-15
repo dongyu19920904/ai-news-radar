@@ -17,7 +17,11 @@ on:
       - "sitemap.xml"
       - "tokens.css"
   schedule:
-    - cron: "17,47 * * * *"
+    # Match upstream's bounded cadence: hourly at weekday peaks, 3-4h otherwise.
+    - cron: "17 1-3,6-9 * * 1-5"
+    - cron: "17 5,11,14,23 * * *"
+    - cron: "17 2,8 * * 6,0"
+    - cron: "17 17,21 * * *"
 
 concurrency:
   group: update-ai-news-${{ github.ref }}
@@ -46,7 +50,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Validate collectors and contracts
+        run: |
+          python -m pytest -q -p no:cacheprovider
+          node --test tests/frontend-core.test.cjs tests/frontend-contract.test.cjs
+          node --check assets/core.js
+          node --check assets/app.js
 
       - name: Prepare OPML
         env:
@@ -139,3 +150,20 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  smoke:
+    needs: deploy
+    timeout-minutes: 5
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: master
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - run: python -m pip install -r requirements.txt
+      - name: Verify published snapshots
+        run: python scripts/verify_public_site.py --base-url https://radar.aivora.cn/ --expected-generated-at "$(python -c 'import json; print(json.load(open("data/latest-24h.json"))["generated_at"])')"

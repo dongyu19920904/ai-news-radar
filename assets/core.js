@@ -36,8 +36,14 @@
     ].join("|");
   }
 
+  function activityDate(item) {
+    if (item?.site_id === "producthunt" && item?.recency_basis === "updated_at") return item.updated_at;
+    if (item?.site_id === "github_trending") return item.observed_at;
+    return item?.published_at || item?.first_seen_at;
+  }
+
   function timestampOf(item) {
-    const raw = item?.published_at || item?.first_seen_at;
+    const raw = activityDate(item);
     const timestamp = Date.parse(raw || "");
     return Number.isFinite(timestamp) ? timestamp : 0;
   }
@@ -153,6 +159,7 @@
 
   return {
     MAX_TAKEAWAY_LENGTH,
+    activityDate,
     dailyProgress,
     itemIdentity,
     itemScore,

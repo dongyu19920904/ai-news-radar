@@ -83,13 +83,32 @@ baseline, then let the aggregator layer add breadth.
   uses centralized GitHub Actions plus official X API credentials. This project
   consumes only its public generated JSON files, so public visitors do not need
   X API credentials.
-- **AI Breakfast**: reads the public Beehiiv archive through Jina Reader because
-  the original Beehiiv feed can be blocked from GitHub Actions.
+- **Curated AI media**: replaces the persistently blocked AI Breakfast default
+  collector with The Decoder, MarkTechPost Research,
+  The Verge (strict AI title filter), and Claude Code release Atom feeds.
+  Each feed has a small item cap; partial failures remain visible in source status.
+- **AI HubToday**: reads `https://hex2077.dev/rss-zh-CN.xml`, the migrated site's
+  structured RSS feed, retaining its source dates and original site identity.
+- **Hacker News Algolia**: focused AI-keyword searches with a minimum discussion
+  threshold, rather than a general front-page import.
+- **GitHub Trending / Product Hunt**: public project discovery sources adapted
+  from upstream. Trending observation time and Product Hunt update time are
+  distinct from publication; the UI labels them accordingly.
 - **AI HOT**: reads the public RSS feed at `https://aihot.virxact.com/feed.xml`,
   with equivalent Virxact RSS endpoints as fallbacks if the primary endpoint
   temporarily returns zero parseable items.
 
 ## Disabled Default Sources
+
+- **AI Breakfast**: its public Jina archive repeatedly returns HTTP 403. The
+  parser remains available for explicit advanced use, but scheduled collection
+  no longer calls it.
+- **Artificial Intelligence News**: the upstream feed returned 403 in the
+  October 16 source probe and remains on the watchlist.
+- **TechCrunch AI / VentureBeat AI**: evaluated but not enabled as direct defaults.
+  TechCrunch's eight-item sample duplicated TechURLs completely; VentureBeat's
+  reachable feed had no items in the last 30 days. Existing aggregator coverage
+  remains intact, and neither source is counted as newly effective coverage.
 
 - **X API direct recent search**: supported as an advanced, secret-backed adapter
   through `X_API_ENABLED=1` and `X_BEARER_TOKEN`, but disabled by default because
@@ -113,7 +132,8 @@ and AgentMail budget notes.
 to pass through the real project fetch path on GitHub Actions:
 
 - **Official examples**: OpenAI News, Hugging Face Blog, Google DeepMind Blog,
-  Google AI Blog, and Microsoft AI Blog.
+  Google AI Blog, and Microsoft Foundry Blog. The retired Microsoft AI feed
+  redirects through the feed replacement map to the verified official Foundry feed.
 - **AI media / builder feeds**: Wired AI, InfoQ CN, NVIDIA Generative AI Blog,
   宝玉, and Simon Willison.
 
