@@ -1,228 +1,168 @@
 {
-  "generated_at": "2026-10-16T09:10:22.498486Z",
+  "generated_at": "2026-11-01T16:07:36.743892Z",
   "timezone": "Asia/Shanghai",
   "root_url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview",
   "history_url": "https://waytoagi.feishu.cn/wiki/FjiOwWp2giA7hRk6jjfcPioCnAc",
   "window_days": 7,
-  "latest_date": "2026-10-15",
-  "count_today": 7,
+  "latest_date": "2026-11-01",
+  "count_today": 1,
   "updates_today": [
     {
-      "date": "2026-10-15",
-      "title": "作者开源视频风格Skill chengfeng-video-styles，依托Opus 5.5，搭建起了一套可复用的AI视频生产工作流。内置16种成熟视频风格，还支持上传参考素材复刻全新视觉。流程也很巧妙，先生成多版3秒样片筛选风格，确认满意后再渲染全片，避免token浪费。来上手试试！",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-15",
-      "title": "作者实测了爆火开源逆向工具REA，仅用6分钟就让AI解析出飞书客户端架构并做出本地多开版本。文中复盘了REA短时间内爆火的底层原因，同时还整理了社区热议的争议点，包括工具价值、IP合规风险与使用边界。最后附上了实操安全提醒，可以帮你看懂AI逆向的能力上限，避开法律与安全陷阱。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-15",
-      "title": "作者利用Opus 5.5通过编写HTML动效网页截帧生成视频，无需AE、不用手动找图，仅靠几句指令就完成多款AI产品宣传片，还开源了整套制作Skill。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-15",
-      "title": "不少开发板项目明明代码没问题，最后却卡在内存：屏幕带不动、中文字库塞不下、断电后数据消失，甚至买完板子才发现没有 PSRAM。CY这篇文章把 Flash、SRAM 和 PSRAM 比作书柜、桌面和抽屉柜，和大家聊一下这三种存储。很适合刚接触嵌入式、准备做带屏设备的人读一遍，能省下不少返工时间。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-15",
-      "title": "World Model 最近越来越火，但很多人只知道它能“预测未来”，再往下就容易被强化学习、隐空间和视频生成等概念劝退。这份三万字指南梳理了 220 多项研究、六类技术路线及机器人、自动驾驶、游戏等应用，也直面“视频逼真是否等于理解物理”的争议。适合刚入门的学生和想补全研究版图的开发者，用一篇建立完整认知框架。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-15",
-      "title": "Meta 全新 Muse Wonder 模型带来亮眼的 Active Memory 主动记忆能力，突破了传统 AI 仅存储对话文本的局限，能调取你的过往偏好，直接参与任务决策。老金以长跑规划、婚礼排座、T 恤定制演示为例，搭配 Active Focus 能力，跨工具执行时仍然可以持续守住你的个性化。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-15",
-      "title": "GitHub 上一个叫 REA 的项目 Star 从 1.5 万冲到 23 万+，凭什么这么火？REA 全称 Reverse Engineer Anything——逆向一切。本文深入拆解了 REA 的工作机制与架构——逆向工程从\"人用工具\"切换到\"Agent 用工具\"，究竟是如何实现的。",
+      "date": "2026-11-01",
+      "title": "姚金刚和向阳乔木老师今年在WaytoAGI的第六场GEO公开课。这次公开课，主要的分享主题，是海外GEO，直播公开课涉及到的PPT、开源系统、GEO原理演示工具链接及白皮书获取方式，已附在了文末。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     }
   ],
-  "count_7d": 36,
+  "count_7d": 30,
   "updates_7d": [
     {
-      "date": "2026-10-15",
-      "title": "作者开源视频风格Skill chengfeng-video-styles，依托Opus 5.5，搭建起了一套可复用的AI视频生产工作流。内置16种成熟视频风格，还支持上传参考素材复刻全新视觉。流程也很巧妙，先生成多版3秒样片筛选风格，确认满意后再渲染全片，避免token浪费。来上手试试！",
+      "date": "2026-11-01",
+      "title": "姚金刚和向阳乔木老师今年在WaytoAGI的第六场GEO公开课。这次公开课，主要的分享主题，是海外GEO，直播公开课涉及到的PPT、开源系统、GEO原理演示工具链接及白皮书获取方式，已附在了文末。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-15",
-      "title": "作者实测了爆火开源逆向工具REA，仅用6分钟就让AI解析出飞书客户端架构并做出本地多开版本。文中复盘了REA短时间内爆火的底层原因，同时还整理了社区热议的争议点，包括工具价值、IP合规风险与使用边界。最后附上了实操安全提醒，可以帮你看懂AI逆向的能力上限，避开法律与安全陷阱。",
+      "date": "2026-10-31",
+      "title": "这篇文章拆解了 DeepSeek Harness 的 Super-agent 工程方案，为想搭建团队研发智能体、个人长期在线助手的开发者，提供了一套可落地的分布式架构参考。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-15",
-      "title": "作者利用Opus 5.5通过编写HTML动效网页截帧生成视频，无需AE、不用手动找图，仅靠几句指令就完成多款AI产品宣传片，还开源了整套制作Skill。",
+      "date": "2026-10-31",
+      "title": "这份月度开源模型汇总帮我们打捞了信息流里容易错过的新模型，同时覆盖OCR、语音、文生图、科研、游戏智能体等多元方向，适合开发者快速筛选适配私有部署、Agent、RAG和端侧场景的底座。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-15",
-      "title": "不少开发板项目明明代码没问题，最后却卡在内存：屏幕带不动、中文字库塞不下、断电后数据消失，甚至买完板子才发现没有 PSRAM。CY这篇文章把 Flash、SRAM 和 PSRAM 比作书柜、桌面和抽屉柜，和大家聊一下这三种存储。很适合刚接触嵌入式、准备做带屏设备的人读一遍，能省下不少返工时间。",
+      "date": "2026-10-31",
+      "title": "老金以他自身的课程、品牌商单、软件交付三种业务复盘了单月近 9.4 万流水，适合想靠 AI 接单或做一人公司的朋友，读完你或许会更加清楚该从哪一单开始、怎么少踩坑。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-15",
-      "title": "World Model 最近越来越火，但很多人只知道它能“预测未来”，再往下就容易被强化学习、隐空间和视频生成等概念劝退。这份三万字指南梳理了 220 多项研究、六类技术路线及机器人、自动驾驶、游戏等应用，也直面“视频逼真是否等于理解物理”的争议。适合刚入门的学生和想补全研究版图的开发者，用一篇建立完整认知框架。",
+      "date": "2026-10-31",
+      "title": "最近 Jev 带火的「决策模型」，把分类做成了一个新赛道：给一段内容、几道问题和候选答案，它直接返回标签与置信度。普通 LLM 要逐 token 生成 JSON，它却能一次并行回答多题，输入便宜、没有输出 token 成本。作者以 Perplexity Decider 为例，拆开了背后的完整机制。想搞懂 Jev 与决策 API 为什么突然火起来，这篇值得细读。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-15",
-      "title": "Meta 全新 Muse Wonder 模型带来亮眼的 Active Memory 主动记忆能力，突破了传统 AI 仅存储对话文本的局限，能调取你的过往偏好，直接参与任务决策。老金以长跑规划、婚礼排座、T 恤定制演示为例，搭配 Active Focus 能力，跨工具执行时仍然可以持续守住你的个性化。",
+      "date": "2026-10-31",
+      "title": "智能体上线后，最容易掉进一个循环：用户报错就改 Prompt，改完觉得好了，过两天又在别的场景翻车。问题在于，团队只有零散反馈，没有一套把失败沉淀成改进的机制。作者这篇文章分享了三套互补的迭代思路，或许会给大家有所帮助！",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-15",
-      "title": "GitHub 上一个叫 REA 的项目 Star 从 1.5 万冲到 23 万+，凭什么这么火？REA 全称 Reverse Engineer Anything——逆向一切。本文深入拆解了 REA 的工作机制与架构——逆向工程从\"人用工具\"切换到\"Agent 用工具\"，究竟是如何实现的。",
+      "date": "2026-10-31",
+      "title": "很多团队把一批重复任务全都塞给 Agent：让它自己规划、调工具、反复判断。Demo 看着很聪明，到了真实应用场景里却很慢、很贵、每次走法不同，出了错也很难复现。作者这篇文章给了更务实的分流方式，适合正在做 AI 自动化的人，先判断任务该交给谁，成本和稳定性也都会更可控。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-14",
-      "title": "很多团队说要让 AI 接管业务，最后却只做到“生成一份报告”：资料没进系统、客户重复建档，换个对话入口，规则还可能失效。这篇文章从一场企业拜访出发，跑通了一条真实闭环：AI 读取日历确定拜访对象，调用调研 Skill 拆解商业模式和现场问题，再按 SOP 建客户主档、关联业务、归档报告，最后用定时任务扫描未来日程。",
+      "date": "2026-10-30",
+      "title": "火爆出圈的DSH Go，是社区打造的安卓端DSH客户端，免Root就能在手机本地跑Agent脚本，一键无缝接力电脑任务。除了支持任务中途插话调整需求，还可授权AI操控手机完成日程等操作，同时对支付、验证码等高风险行为也做了严格限制。一起上手试试，随时随地调度DeepSeek Harness处理代码、数据任务。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-14",
-      "title": "大家总爱问，年轻人学 AI 到底能拿到什么结果？这篇专访记录了WaytoAGI校园大使吴桐与搭档蟹老板的AI创业故事。他们一边借力AI快速落地项目、承接商单，一边坚守慢节奏的人际相处，理性看待AI依赖问题，思考效率红利背后的隐患。他们的故事或许能够带给想要入局AI的年轻人更加真实的参考与启发。",
+      "date": "2026-10-30",
+      "title": "普通Agent循环只能处理即时任务，而Always-on Agent可以支持跨多天的长期委托。本篇文章拆解了这套架构的核心工程范式，以及从工程实现上，最近爆火的各类Personal Agents 如何做到 Always-on 呢？",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-14",
-      "title": "卡尔让 Gemini 4 Argon 用“起点修仙文”来写自己的更新点，结果成品在长篇连贯、指令遵循和风格模仿上表现都很亮眼，也减少了套话和反复续写带来的割裂。来看看写作能力到底如何？",
+      "date": "2026-10-30",
+      "title": "大多数智能体项目起步方式相同：最强的模型、长长的提示词、精彩的演示。随后真正的任务到来，一周之内你发现数字与源头不符、上下文丢失，有一天还出现一封未经任何人批准的客户邮件。一起来看看到底如何构建生产级智能体！",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-14",
-      "title": "做GEO不能只盯着 ChatGPT 的最终回答，而是要看的它把问题拆成了什么、搜过哪些页面，又真正引用了谁。作者开源了 chatgpt-fanout-queries Skill。输入一个真实问题，它会调用 Responses API，保存完整搜索轨迹，提取 Fan-out 搜索词，并将搜索来源与最终引用分开统计，最后输出可离线查看的 HTML 报告。",
+      "date": "2026-10-30",
+      "title": "不少人把精力放在临时提示词上，却忽视了AGENTS.md、CLAUDE.md的巨大价值。它能沉淀项目固定约定，明确技术栈、执行命令、代码风格与操作边界，避免每次对话重复沟通，防止 Agent 擅自重构、编造命令、过度设计。文中附有适配Codex与Claude Code的可直接套用的模板，可以帮你稳定Agent输出，减少反复沟通，让代码交付可控、风格统一。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-14",
-      "title": "MiniMax Design 全新 Agent V3 上线！这次升级，创作消耗降低 30% 以上，同页面素材互通复用，自定义规则可以锁定你的创作习惯，素材分类管理并留存历史版本，修改迭代更省心！",
+      "date": "2026-10-30",
+      "title": "Suno 开放了 MCP 内测，无需 API Key，授权后就能在 Claude、Cursor 等主流AI工具里直接调用作曲能力，彻底告别跨窗口复制文案的割裂创作流程。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-14",
-      "title": "Agent 最容易浪费额度的地方，常常发生在需求完成之后：它不断追加优化建议，你顺手点头，半小时的任务就拖成了一下午。作者开源了一套不到 300 字的“红绿灯”提示语，适合经常使用 Codex、Claude Code的人，把是否继续推进的决定权重新留给自己。",
+      "date": "2026-10-29",
+      "title": "这篇文章深度拆解了线性注意力从 DeltaNet、GDN 到 KDA 的演进脉络，同时落地到 vLLM 里 Hybrid 混合模型的缓存工程实现，帮你看懂模型架构和推理调度之间的软硬件取舍。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-13",
-      "title": "还在为内容配图、制作漫画与分享PPT耗费大量时间？作者迭代三款开源AI创作Skill，一键就能部署使用。配图助手拥有28种画风，适配多种画面比例；漫画助手借助IP形象把抽象知识点可视化；PPT助手则可快速产出多风格演示文稿。快来上手试试！",
+      "date": "2026-10-29",
+      "title": "这是面向工程师、QA 和产品经理的评估与追踪指南的第二部分，旨在帮助您测试 AI 应用的每一项变更。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-13",
-      "title": "很多人让 Codex 做动画，镜头、材质、动作节奏都像临时拼出来的。作者分析了 100 多个 Claude 动画源码，通过双盲和消融实验，把“Claude 感”的绘图代码、场景、模型和制作系统整理成素材库，让 GPT 生成动画时能直接查案例、复用实现，再重新改编成新故事。",
+      "date": "2026-10-29",
+      "title": "这套七层可复用的 Claude Code 工作流，可以帮你把Opus 5.5任务做成可断点续跑、自带证据留存的可靠体系。它把项目规范、技能脚本、MCP数据源、权限钩子、独立审查子智能体、推理强度和验收目标拆解开，用固定目录结构和校验表格沉淀成果。不管是写稿还是资料核验，都不用反复重建对话，很适合长期稳定的AI工程化工作。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-13",
-      "title": "很多人看到 REA 刷屏后，只想到“拿它逆向软件”。但是逆向≠复刻。作者发现REA+Reverse-skill+PentAGI三件套，打通了从逆向解析到复刻开发、安全检测的完整 AI 流水线，交给 Codex 就可以自动执行。",
+      "date": "2026-10-29",
+      "title": "作者用同一套任务测了 Grok Bot、Muse、Dots、Instinct。实测覆盖四类共 8 个通用场景：信息与沟通（邮件、日程）、主动与定时（金融行情监控、定时买咖啡）、消费与出行闭环（订酒店、买火车票、打车）和找活动（筛选近期 AI 活动）。一起来看看他们的效果如何！",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-13",
-      "title": "X推出全新30美元Premium打包订阅，一次性囊括Grok、Cursor、Grok Bot和X会员。老金拆解了不同档位的差异与老用户迁移的风险，帮你判断这套打包方案是否适合自己。",
+      "date": "2026-10-29",
+      "title": "Skill 从去年A 社提出至今，已经成为基础配置随处可见了，但真正能用到企业办公场景下的还是屈指可数。作者根据自身的企业实用经验，汇总一下企业里不同部门最常用的几个 Skills。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-13",
-      "title": "REA短短一周收获了13万GitHub星标，它爆火的核心不止降低了逆向门槛，更藏着一套解决AI幻觉的优秀工程思路。不靠提示词约束大模型，而是在工具层搭建多重可信机制：事实分级标注、传输哈希校验，强制标记未知信息，矛盾结论直接拦截。一旦环境校验失败就停止工作，绝不编造虚假内容。这套架构可以迁移到MCP工具开发，给医疗、法律等高严谨场景构建可信AI系统提供可落地的参考范式。",
+      "date": "2026-10-28",
+      "title": "这篇文章把 Personal Agent 从 \"看着香\" 到 \"真敢用\" 之间，所有没人好意思说出口的尴尬，拆成了 100 个扎心问题。读完你会清楚知道：现在的 agent 到底能托底什么、不能碰什么，以及你下一步该往哪儿踩。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-12",
-      "title": "爆火开源工具REA，可以搭配Codex完成AI驱动逆向工程。文章以经典恐龙跑酷小游戏作为实战案例，附上Mac环境全套部署命令，带你直接拆解游戏底层加速逻辑，再让AI生成可自定义调速的新版网页游戏。全程不用手写大量代码，附带详细校验步骤与常见报错解决方案。学会这套工作流，你就能解析网页、桌面应用的底层实现，自由复刻改造各类软件功能。",
+      "date": "2026-10-28",
+      "title": "这份AI原生组织实施的图解手册把社区协作拆成了一条可跑的闭环：先写清任务、责任、资料版本和授权边界；让 AI 先交小样、标出依据与缺项；人工核对后再执行、记录结果并复盘更新。如果你也想把 AI 带进团队日常的运营，值得细读。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-12",
-      "title": "本周AI音乐领域的信号很密：一边是生成能力继续往创作流程里钻，一边是版权、刷量和平台治理开始加强。索尼已要求平台下架超 26 万首 AI 仿唱曲目，首例 AI 音乐刷量欺诈案也进入刑事判决；产品侧 Mureka Remix 支持清唱和 Demo 二创，Google Flow Music 接入 DAW 与 Android，Suno 则补上专辑发布和 Studio 编辑细节。还有5篇论文，从可演奏声音形变、实时神经合成器到音乐裁判模型评估，能看出 AI 音乐正在从“能生成”走向“能生产、能分发、能被监管”。",
+      "date": "2026-10-28",
+      "title": "还在苦恼微信群消息太多，没法随时交给 AI 复盘归档？开源工具 WeChatBridge 上线 iOS 版，借助系统分享安全导出聊天记录，还支持分批合并投递到各大模型，也能直接存入 Obsidian 长期沉淀。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-12",
-      "title": "想降低智能体批量决策的高昂开销，可以看看这套Jev+TrueForge组合方案。Jev作为专用决策模型，在匹配分类任务上和Opus精度持平，成本仅为后者1/150。而TrueForge工具链通过多种手段压缩上下文，减少不必要的模型调用。把固定选项判断交给轻量决策模型，大模型聚焦文本生成，这套架构可复用在工单、CRM等业务场景，有效控制Agent长期运行成本。",
+      "date": "2026-10-28",
+      "title": "还在为录屏演示视频耗费大量时间，还需要手动剪辑而发愁？作者分享了一套巧妙方案：直接把 Screen Studio 未加密的工程文件交给 Claude Code、Codex 读取解析，无需导出 MP4。AI 自动删减口水词、调整画面缩放、更换背景、降噪加字幕，长录屏也能高效压缩并附带文稿总结。还直接给出了提示词与Skill部署的步骤，适合经常制作教程的创作者。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-12",
-      "title": "很多企业现在想“让 AI 深入老系统”，但是概念和接入路径都没理清：Agent、Model、Skill、MCP、CLI 到底谁负责什么，老系统又该从哪下手？这篇文章给出了一个比较清晰的路径，一起学习下！",
+      "date": "2026-10-28",
+      "title": "作者分享了自己长期人机协作的实践，借助 Cohub可视化工作台、Mirasim 多人+AI协同空间搭建工作流。此外还探讨了多人和AI异步协作、权限维护、信任建立等容易被忽略的痛点。这套以人为本的共生思路，很适合高频深度使用 AI 创作开发的人参考。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-12",
-      "title": "作者仅凭手机下达指令，就能让Dot调取电脑内私有PPT制作Skill与历史对话素材，自主完成PPT撰写、内容自检与修改，产出配套讲稿。他还对比了Dot、grokbot、Muse三款智能体的差异，一起来看看。",
+      "date": "2026-10-28",
+      "title": "WorkBuddy 与 LibTV 正式打通，大家也不用在多个工具间来回切换搬运素材。作者用万圣节互动小游戏做了一个实战演示，WorkBuddy 统筹任务、编写提示词与交互代码，LibTV 承接图像、视频、配乐生成，借助遮罩控制画面改动、并行渲染多段镜头。它还支持读取本地素材库、定时批量出片，打造自动化内容流水线。快来试试！",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-12",
-      "title": "Agent 评测已经成为了当前 Agent应用的基石。作者这篇文章就给大家详细介绍一下什么是评测、怎么做，以及其中的一些方法论和细节。",
+      "date": "2026-10-27",
+      "title": "这篇文章拆解了客户端开发Web、跨端、原生三条路线的取舍和研发效率、体验、性能的不可能三角。AI 可以快速生成代码，但底层判断、测试验证、踩坑兜底依旧离不开人。这些一线经验，或许能帮做客户端开发的你避开选型和分发里的隐形坑。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-11",
-      "title": "汇集Stripe、Uber、Meta等大厂工程实践，作者提炼出10类多智能体落地范式，还总结出可复用的六条核心设计原则。大家也可以结合自身的业务痛点，从轻量化单一场景起步快速验证。",
+      "date": "2026-10-27",
+      "title": "语音 Agent 看似是给聊天机器人接了个麦克风，背后其实是一个卡在毫秒级预算里的实时流系统。这篇从 800ms 语音到语音延迟出发，拆开音频传输、回合判断、流式 STT-LLM-TTS、工具调用和记忆；讲清了打断、噪声、转人工、GPU 扩缩、边缘故障及每分钟的成本。一起来看看如何设计一个实时语音 AI 智能体！",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-11",
-      "title": "本地跑 LLM 慢，问题往往不只是“算力不够”，更常见的是内存带宽把生成速度锁住了。Mirai 开源推理引擎 Uzu，凭借硬件专属量化、DFlash-Weaver 草稿生成与免回滚树验证方案，在 M5 芯片上实现性能飞跃。一起来看看是怎么回事！",
+      "date": "2026-10-27",
+      "title": "在 AI Agent 辅助编程与自动化内容生产极速狂飙的今天，作者花时间系统整理了一份包含 369 个开源仓库的超级清单。这份清单全面涵盖了能让 Claude Code、Codex 等编程 Agent 实现视频生成、自动化剪辑与代码动效渲染的工具包、Skill 和提示词库。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-11",
-      "title": "本周精选的10篇 AI 论文正在从“换更强模型”转向“把模型外面的系统做扎实”，集结了 CMU、微软、谷歌、Meta 等机构的突破性成果。内容覆盖控制程序工程、检索增强、长周期任务校验、多智能体自优化与记忆架构等核心方向。",
+      "date": "2026-10-27",
+      "title": "作者把企业组织架构的思路迁移到了Grok Bot管理，拆解了直线制、职能型、矩阵制、项目制等多种协作范式。不同架构适配不一样的任务，按需组队、精简传话环节，避免无谓的Token消耗。这套方法论适合正在搭建Agent集群的开发者参考。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-11",
-      "title": "想低成本搭建企业AI业务中台？这篇文章拆解了卡兹克团队在飞书工作台搭建组织中台的完整方案，提供了零代码自助搭建、网页嵌入两套落地路径。覆盖权限配置、模板选用、页面编辑、发布上线全流程，搭配各类小组件与布局方案，可快速搭建千人千面的业务门户，复帮团队把AI能力落地到真实业务场景。",
+      "date": "2026-10-27",
+      "title": "不少团队接入 AI 后，效率只停在“写得更快”：需求还在多人之间流转，信息仍然散在 Slack、代码库和表格里。Manus 把自己当实验场：用 Mono 给 AI 补齐了跨仓库的上下文、权限和验证能力，让一人推进全端需求；产品经理直接提交代码，用视频表达需求；市场把工作流接成会主动跟进的“数字同事”。想做 AI Native 改造的团队，值得点开细看。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-11",
-      "title": "很多人想转行 Agent 工程师，一上来就收藏框架、跑 demo，结果 API、RAG、状态管理、后端工程都没真正串起来。作者整理了一份学习路线：覆盖 LLM 原理、提示词工程、RAG、智能体循环，延伸至后端开发全栈能力，配套学习链接、实操项目与验收标准。或许可以帮你快速定位知识盲区，搭建可用于求职展示的技术作品集。",
+      "date": "2026-10-27",
+      "title": "GPT-6.1 Terra带来了看图建模、操控桌面软件的能力。虽然它下调了API定价，幻觉硬猜比例也大幅降低，但复杂编程任务仍不如Sol与Astra。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     },
     {
-      "date": "2026-10-11",
-      "title": "作者这份实战分享，带来一套轻量化的Agent开发工作流，涵盖需求对齐、多Agent协同开发、搭建Agent友好的端到端测试环境，以及AI生成代码的评审策略。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-10",
-      "title": "这波 Personal Agent 火起来，不只是“AI 助手换个名字”，背后其实是产品形态开始收敛：每个用户一台云电脑、一个浏览器、一个常驻后台 Agent，敏感操作再拉人审批。这篇文章把 Meta Muse、OpenAI Dots、Grok Bot、Gemini Spark、Manus Cue 放在一起进行了全面复盘。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-10",
-      "title": "老金深度体验了 由 GPT-6 Astra 驱动的 Dot 个人云端智能体后，分享了开源项目看板、复用工作手册、手机语音续改、定时巡检等实操方案，可以帮你简化多任务管理，不用反复复述需求，轻松托管各类长期工作项目。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-10",
-      "title": "想低成本搭建个人网站与轻量AI接口？这份Cloudflare实操指南从域名接入、HTTPS配置、GitHub自动部署网站，到域名邮箱、R2对象存储，还讲解了Workers调用开源模型、全新cf命令行交由Agent管理的整套资源，帮你避开各类配置陷阱，零服务器成本落地你的线上项目。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-10",
-      "title": "很多老师对 Agent 很感兴趣，却常常卡在资料太散、工具名太多、教程太碎，不知道从哪一步开始。这套《教师办公 Agent 入门指南》很适合一线教师入门：用豆包工作串起备课资料整理、PPT 生成、录音处理、公众号排版、成绩分析、课堂互动、Skill 制作、飞书知识库 / 多维表格 / 自动化等 21 个主题。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-10",
-      "title": "Anthropic推出的Claude Motion，不靠视频大模型，直接用代码渲染演示动效。只需调整文字、数字、时长等参数，其余画面不会被破坏。文中还提供了可直接丢给 Opus 5.5 的全套提示词，自动筛选适合可视化的内容、输出分镜脚本、生成代码并导出 1080p MP4，快速制作产品演示短片。",
-      "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
-    },
-    {
-      "date": "2026-10-10",
-      "title": "AI 写代码越来越强，大家最常聊效率，却很少认真聊：当机器接过越来越多“手活”，工程师会失去什么。",
+      "date": "2026-10-27",
+      "title": "Claude 为 Claude Code 编写了大约 90% 的代码。那么在如此规模下，他们如何进行代码审查？谁还会去读代码？如果代码出错怎么办？Anthropic 公开了 Claude Code 的分层审查体系，用多智能体自动校验承接了大部分基础检查，按风险分级管控审批，把人力释放给架构、安全、产品方向等高价值判断。",
       "url": "https://waytoagi.feishu.cn/wiki/QPe5w5g7UisbEkkow8XcDmOpn8e?fromScene=spaceOverview"
     }
   ],
