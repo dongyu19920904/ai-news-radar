@@ -269,6 +269,16 @@ h3 {
   color: var(--color-ink);
 }
 
+.freshness-notice:not([hidden]) {
+  padding: var(--space-md);
+  margin-block: var(--space-md) 0;
+  border: 0.0625rem solid var(--color-warn);
+  border-radius: var(--radius-input);
+  background: var(--color-warn-soft);
+  color: var(--color-ink);
+  font-size: var(--text-sm);
+}
+
 .button {
   display: inline-flex;
   align-items: center;

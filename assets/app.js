@@ -48,6 +48,7 @@
     briefingList: byId("briefingList"),
     briefingStatus: byId("briefingStatus"),
     coverageStrip: byId("coverageStrip"),
+    freshnessNotice: byId("freshnessNotice"),
     heroRadarButton: byId("heroRadarButton"),
     heroSignalCount: byId("heroSignalCount"),
     issueDate: byId("issueDate"),
@@ -398,9 +399,10 @@
     const rawCount = Number(state.sourceStatus?.fetched_raw_items || state.totalRaw || allCount);
     const official = Number(rows.find((row) => row.site_id === "official_ai")?.item_count || 0);
     const okSites = Number(state.sourceStatus?.successful_sites || rows.filter((row) => row.ok).length);
+    const freshness = core.snapshotFreshness(state.generatedAt);
 
     const cards = [
-      ["源健康", rows.length ? `${fmtNumber(okSites)}/${fmtNumber(rows.length)}` : "加载中", failed.length ? `${failed.length} 个失败源` : (errorMessage || "公开源状态"), failed.length ? "warn" : "ok"],
+      ["源健康", freshness.stale ? "待更新" : (rows.length ? `${fmtNumber(okSites)}/${fmtNumber(rows.length)}` : "加载中"), freshness.stale ? "历史快照，不代表当前源状态" : (failed.length ? `${failed.length} 个失败源` : (errorMessage || "公开源状态")), freshness.stale || failed.length ? "warn" : "ok"],
       ["抓取信号", `${fmtNumber(rawCount)} 条`, "24 小时原始覆盖池", "signal"],
       ["AI 精选", `${fmtNumber(state.totalAi)} 条`, "规则筛选的强相关条目", "signal"],
       ["官方节点", `${fmtNumber(official)} 条`, "模型公司与开发者官方更新", "official"],
@@ -443,7 +445,9 @@
     const allCount = state.allDedup ? state.totalAllMode : state.totalRaw;
     const okSites = Number(state.sourceStatus?.successful_sites || siteRows().filter((row) => row.ok).length);
     const totalSites = siteRows().length;
-    els.advancedSummary.textContent = totalSites
+    els.advancedSummary.textContent = core.snapshotFreshness(state.generatedAt).stale
+      ? `历史快照 · 全量 ${fmtNumber(allCount)} 条`
+      : totalSites
       ? `${okSites}/${totalSites} 源可用 · 全量 ${fmtNumber(allCount)} 条`
       : `全量 ${fmtNumber(allCount)} 条`;
   }
@@ -754,6 +758,8 @@
     const zeroSites = Array.isArray(status.zero_item_sites) ? status.zero_item_sites : [];
     const rss = status.rss_opml || {};
     const failedFeeds = Array.isArray(rss.failed_feeds) ? rss.failed_feeds : [];
+    const stale = core.snapshotFreshness(state.generatedAt).stale;
+    if (stale) els.sourceHealth.appendChild(emptyNode("快照已过期或时间无效，以下是上次抓取状态，不代表当前状态。", "health-issue"));
     const grid = document.createElement("div");
     grid.className = "health-grid";
     grid.append(
@@ -770,7 +776,7 @@
       if (zeroSites.length) issues.appendChild(issueList("零结果站点", zeroSites));
       if (failedFeeds.length) issues.appendChild(issueList("失败 RSS", failedFeeds));
       els.sourceHealth.appendChild(issues);
-    } else {
+    } else if (!stale) {
       els.sourceHealth.appendChild(emptyNode("本轮公开源状态正常。", "health-ok"));
     }
     renderAdvancedSummary();
@@ -915,9 +921,8 @@
       renderList();
       renderBriefing();
       renderCoverageStrip();
-      els.updatedAt.textContent = fmtTime(state.generatedAt);
       els.heroSignalCount.textContent = fmtNumber(state.totalAi);
-      els.navStatus.textContent = `${fmtNumber(state.totalAi)} 条信号在线`;
+      renderFreshness();
       els.briefingStatus.textContent = state.briefingItems.length ? els.briefingStatus.textContent : "暂无条目";
     } else {
       showNewsError(newsResult.reason);
@@ -940,6 +945,25 @@
       els.waytoagiList.replaceChildren(emptyNode(waytoagiResult.reason.message, "waytoagi-error"));
     }
   }
+
+  function renderFreshness() {
+    const freshness = core.snapshotFreshness(state.generatedAt);
+    els.freshnessNotice.hidden = !freshness.stale;
+    els.freshnessNotice.textContent = freshness.stale
+      ? (freshness.ageHours === null ? "快照时间无效，不能确认数据是否最新。请刷新页面后重试。"
+        : `数据已超过 6 小时未更新（约 ${Math.floor(freshness.ageHours)} 小时）。当前显示历史快照，请刷新页面或查看任务状态。`)
+      : "";
+    els.updatedAt.textContent = `${fmtTime(state.generatedAt)}${freshness.stale ? " · 已过期" : ""}`;
+    els.navStatus.textContent = freshness.stale ? "历史快照 · 待更新" : `${fmtNumber(state.totalAi)} 条信号在线`;
+  }
+
+  // Local clock only: no extra fetches or background deployment triggers.
+  window.setInterval(() => {
+    if (!state.generatedAt) return;
+    renderFreshness();
+    renderCoverageStrip();
+    renderSourceHealth();
+  }, 60000);
 
   function debounce(callback, delay) {
     let timer = null;

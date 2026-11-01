@@ -81,3 +81,16 @@ test("page workflow publishes only the runtime artifact", () => {
   assert.match(workflow, /cp CNAME robots\.txt sitemap\.xml llms\.txt _site\//);
   assert.doesNotMatch(workflow, /cp\s+-r\s+data/);
 });
+
+test("stale snapshots have a visible warning and do not claim live source health", () => {
+  assert.match(html, /id="freshnessNotice"[^>]*role="status"[^>]*hidden/);
+  assert.match(app, /core\.snapshotFreshness\(state\.generatedAt\)/);
+  assert.match(app, /历史快照，不代表当前源状态/);
+  assert.match(app, /历史快照 · 待更新/);
+});
+
+test("one bounded two-hour schedule and publication verification remain enabled", () => {
+  assert.deepEqual([...workflow.matchAll(/- cron: "([^"]+)"/g)].map((match) => match[1]), ["21 */2 * * *"]);
+  assert.match(workflow, /workflow_dispatch:/);
+  assert.match(workflow, /smoke:[\s\S]*needs: deploy/);
+});

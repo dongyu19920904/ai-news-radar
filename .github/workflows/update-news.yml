@@ -17,11 +17,9 @@ on:
       - "sitemap.xml"
       - "tokens.css"
   schedule:
-    # Match upstream's bounded cadence: hourly at weekday peaks, 3-4h otherwise.
-    - cron: "17 1-3,6-9 * * 1-5"
-    - cron: "17 5,11,14,23 * * *"
-    - cron: "17 2,8 * * 6,0"
-    - cron: "17 17,21 * * *"
+    # One UTC schedule, every two hours at :21 (00:21, 02:21, ... in Shanghai).
+    # A real schedule event, not workflow_dispatch, must verify reactivation.
+    - cron: "21 */2 * * *"
 
 concurrency:
   group: update-ai-news-${{ github.ref }}

@@ -147,7 +147,8 @@ python scripts/update_news.py --output-dir data --window-hours 24 --rss-opml fee
 
 `.github/workflows/update-news.yml` 已经配置好定时任务。
 
-- 工作日高峰每小时运行，其他时段约 3–4 小时一次，采用原项目的分时段节奏
+- 每 2 小时运行一次（北京时间 00:21、02:21、…、22:21；GitHub 可能排队延迟），使用单一定时表达式
+- 快照超过 6 小时未更新时，首页明确显示过期警告，历史源健康不再显示为实时正常
 - 自动生成并提交 `data/*.json`
 - 更新完成后只把网页运行所需的静态文件和五个公开数据快照部署到 GitHub Pages，并检查线上快照时间
 - 如果没有设置 `FOLLOW_OPML_B64`，线上工作流会自动使用公开示例 `feeds/follow.example.opml`，让页面展示 RSS/OPML 能力

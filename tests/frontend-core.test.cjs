@@ -4,6 +4,19 @@ const core = require("../assets/core.js");
 
 const now = Date.parse("2026-07-31T12:00:00Z");
 
+test("snapshot freshness uses the reader clock and warns after six hours", () => {
+  assert.deepEqual(core.snapshotFreshness("2026-07-31T11:00:00Z", now), { stale: false, ageHours: 1 });
+  assert.equal(core.snapshotFreshness("2026-07-31T06:00:00Z", now).stale, false);
+  assert.equal(core.snapshotFreshness("2026-07-31T05:59:59Z", now).stale, true);
+  assert.equal(core.snapshotFreshness("2026-07-01T00:00:00Z", now).stale, true);
+});
+
+test("invalid and future snapshot dates cannot appear healthy", () => {
+  for (const date of [null, "", "invalid", "2026-08-01T00:00:00Z"]) {
+    assert.deepEqual(core.snapshotFreshness(date, now), { stale: true, ageHours: null });
+  }
+});
+
 function item(overrides = {}) {
   return {
     site_id: "official_ai",

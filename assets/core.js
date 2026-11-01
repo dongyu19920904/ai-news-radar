@@ -10,6 +10,14 @@
 
   const MAX_TAKEAWAY_LENGTH = 180;
 
+  function snapshotFreshness(generatedAt, nowMs = Date.now()) {
+    const generatedMs = Date.parse(generatedAt || "");
+    const valid = Number.isFinite(generatedMs) && Number.isFinite(nowMs)
+      && generatedMs <= nowMs + 5 * 60 * 1000;
+    const ageHours = valid ? Math.max(0, (nowMs - generatedMs) / 3600000) : null;
+    return { stale: !valid || ageHours > 6, ageHours };
+  }
+
   function safeHttpUrl(value) {
     if (typeof value !== "string" || !value.trim()) return "";
     try {
@@ -166,6 +174,7 @@
     parseSavedEntries,
     pickSurprise,
     safeHttpUrl,
+    snapshotFreshness,
     sanitizeTakeaway,
     selectBriefingItems,
   };
